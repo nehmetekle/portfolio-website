@@ -94,13 +94,6 @@ strong { font-weight: 600; color: #fff; }
   text-transform: uppercase;
   opacity: 0;
 }
-.splash-wipe {
-  position: absolute;
-  inset: 0;
-  background: var(--red);
-  transform: scaleY(0);
-  transform-origin: bottom;
-}
 /* hide scrollbar during splash */
 body.splash-active { overflow: hidden; }
 

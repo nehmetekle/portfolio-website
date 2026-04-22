@@ -2,21 +2,24 @@
    PORTFOLIO SCRIPT — Paul Nehme Tekle
 ════════════════════════════════════════ */
 
-/* ─── Splash intro ───────────────────────── */
+/* ─── Splash intro → hero handoff ───────── */
 (function initSplash() {
-  const splash     = document.getElementById('splash');
-  const tag        = document.getElementById('splash-tag');
-  const name1      = document.getElementById('splash-name-1');
-  const name2      = document.getElementById('splash-name-2');
-  const role       = document.getElementById('splash-role');
-  const wipe       = document.getElementById('splash-wipe');
+  const splash  = document.getElementById('splash');
+  const tag     = document.getElementById('splash-tag');
+  const name1   = document.getElementById('splash-name-1');
+  const name2   = document.getElementById('splash-name-2');
+  const role    = document.getElementById('splash-role');
+
+  // Keep hero name invisible until we hand off
+  const heroName = document.getElementById('hero-name');
+  gsap.set(heroName, { opacity: 0 });
 
   document.body.classList.add('splash-active');
 
   const tl = gsap.timeline();
 
-  // 1 — tag drops in and bounces
-  tl.to(tag, { opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.7)', delay: 0.2 })
+  // 1 — </> tag drops in
+  tl.to(tag,  { opacity: 1, duration: 0.5, ease: 'back.out(1.7)', delay: 0.2 })
   // 2 — name lines rise up
     .to([name1, name2], {
       opacity: 1, y: 0,
@@ -24,20 +27,66 @@
     }, '-=0.1')
   // 3 — role fades in
     .to(role, { opacity: 1, duration: 0.4, ease: 'power2.out' }, '-=0.2')
-  // 4 — hold for a beat
-    .to({}, { duration: 0.7 })
-  // 5 — red wipe sweeps up covering everything
-    .to(wipe, { scaleY: 1, duration: 0.55, ease: 'power3.inOut' })
-  // 6 — wipe exits upward, revealing site
-    .to(wipe, {
-      scaleY: 0, transformOrigin: 'top',
-      duration: 0.55, ease: 'power3.inOut',
+  // 4 — hold
+    .to({}, { duration: 0.65 })
+  // 5 — tag + role fade out
+    .to([tag, role], { opacity: 0, duration: 0.3, ease: 'power2.in' })
+  // 6 — name lines fly to hero position
+    .add(() => {
+      // Measure target (hero name) position
+      const heroRect  = heroName.getBoundingClientRect();
+      const n1Rect    = name1.getBoundingClientRect();
+      const n2Rect    = name2.getBoundingClientRect();
+
+      // Scale factor: hero font is ~same display font, compare heights
+      const heroNameEl  = heroName.querySelector('.hero-line');
+      const heroAccEl   = heroName.querySelector('.hero-line-accent');
+      const heroN1Rect  = heroNameEl  ? heroNameEl.getBoundingClientRect()  : heroRect;
+      const heroN2Rect  = heroAccEl   ? heroAccEl.getBoundingClientRect()   : heroRect;
+
+      const scaleN1 = heroN1Rect.height / (n1Rect.height || 1);
+      const scaleN2 = heroN2Rect.height / (n2Rect.height || 1);
+
+      gsap.to(name1, {
+        x: heroN1Rect.left - n1Rect.left,
+        y: heroN1Rect.top  - n1Rect.top,
+        scale: scaleN1,
+        transformOrigin: 'top left',
+        duration: 0.75, ease: 'power3.inOut'
+      });
+      gsap.to(name2, {
+        x: heroN2Rect.left - n2Rect.left,
+        y: heroN2Rect.top  - n2Rect.top,
+        scale: scaleN2,
+        transformOrigin: 'top left',
+        duration: 0.75, ease: 'power3.inOut'
+      });
+    })
+  // 7 — at end of flight: show hero name, remove splash
+    .to({}, {
+      duration: 0.75,
       onComplete() {
+        gsap.set(heroName, { opacity: 1 });
         splash.remove();
         document.body.classList.remove('splash-active');
+        // Kick off rest of hero entrance (badge, typed, tagline, actions)
+        heroEntranceAfterSplash();
       }
     });
 })();
+
+function heroEntranceAfterSplash() {
+  gsap.set(['#hero-badge', '.hero-typed-wrap', '#hero-tagline', '#hero-actions', '#hero-scroll', '.hero-location'], { opacity: 0, y: 20 });
+  gsap.set(['#hero-scroll', '.hero-location'], { y: 0 });
+  const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+  tl
+    .to('#hero-badge',      { opacity: 1, y: 0, duration: 0.7 })
+    .to('.hero-typed-wrap', { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
+    .to('#hero-tagline',    { opacity: 1, y: 0, duration: 0.6 }, '-=0.45')
+    .to('#hero-actions',    { opacity: 1, y: 0, duration: 0.6 }, '-=0.45')
+    .to('#hero-scroll',     { opacity: 1, duration: 0.5 },       '-=0.3')
+    .to('.hero-location',   { opacity: 1, duration: 0.5 },       '-=0.45');
+}
 
 /* ─── Smooth scroll (Lenis) ─────────────── */
 const lenis = new Lenis({
@@ -243,23 +292,7 @@ mobileMenu.querySelectorAll('a').forEach(a => {
   setTimeout(tick, 1800);
 })();
 
-/* ─── Hero entrance animation ────────────── */
-(function heroEntrance() {
-  const els = ['#hero-badge', '#hero-name', '.hero-typed-wrap', '#hero-tagline', '#hero-actions', '#hero-scroll', '.hero-location'];
-  // Set initial states explicitly so they work regardless of CSS
-  gsap.set(els, { opacity: 0, y: 24 });
-  gsap.set(['#hero-scroll', '.hero-location'], { y: 0 });
-
-  const tl = gsap.timeline({ defaults: { ease: 'power4.out' }, delay: 0.2 });
-  tl
-    .fromTo('#hero-badge',      { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 })
-    .fromTo('#hero-name',       { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1   }, '-=0.4')
-    .fromTo('.hero-typed-wrap', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.5')
-    .fromTo('#hero-tagline',    { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.5')
-    .fromTo('#hero-actions',    { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.5')
-    .fromTo('#hero-scroll',     { opacity: 0 },        { opacity: 1, duration: 0.6 },       '-=0.3')
-    .fromTo('.hero-location',   { opacity: 0 },        { opacity: 1, duration: 0.6 },       '-=0.5');
-})();
+/* ─── Hero entrance — driven by heroEntranceAfterSplash() above ── */
 
 /* ─── Section reveals (IntersectionObserver) */
 (function setupReveals() {
