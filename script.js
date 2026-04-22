@@ -33,32 +33,33 @@
     .to([tag, role], { opacity: 0, duration: 0.3, ease: 'power2.in' })
   // 6 — name lines fly to hero position
     .add(() => {
-      // Measure target (hero name) position
-      const heroRect  = heroName.getBoundingClientRect();
-      const n1Rect    = name1.getBoundingClientRect();
-      const n2Rect    = name2.getBoundingClientRect();
+      const isMobile = window.innerWidth <= 600;
 
-      // Scale factor: hero font is ~same display font, compare heights
-      const heroNameEl  = heroName.querySelector('.hero-line');
-      const heroAccEl   = heroName.querySelector('.hero-line-accent');
-      const heroN1Rect  = heroNameEl  ? heroNameEl.getBoundingClientRect()  : heroRect;
-      const heroN2Rect  = heroAccEl   ? heroAccEl.getBoundingClientRect()   : heroRect;
+      const heroRect   = heroName.getBoundingClientRect();
+      const n1Rect     = name1.getBoundingClientRect();
+      const n2Rect     = name2.getBoundingClientRect();
+
+      const heroNameEl = heroName.querySelector('.hero-line');
+      const heroAccEl  = heroName.querySelector('.hero-line-accent');
+      const heroN1Rect = heroNameEl ? heroNameEl.getBoundingClientRect() : heroRect;
+      const heroN2Rect = heroAccEl  ? heroAccEl.getBoundingClientRect()  : heroRect;
 
       const scaleN1 = heroN1Rect.height / (n1Rect.height || 1);
       const scaleN2 = heroN2Rect.height / (n2Rect.height || 1);
+      const origin  = isMobile ? 'top center' : 'top left';
 
       gsap.to(name1, {
         x: heroN1Rect.left - n1Rect.left,
         y: heroN1Rect.top  - n1Rect.top,
         scale: scaleN1,
-        transformOrigin: 'top left',
+        transformOrigin: origin,
         duration: 0.75, ease: 'power3.inOut'
       });
       gsap.to(name2, {
         x: heroN2Rect.left - n2Rect.left,
         y: heroN2Rect.top  - n2Rect.top,
         scale: scaleN2,
-        transformOrigin: 'top left',
+        transformOrigin: origin,
         duration: 0.75, ease: 'power3.inOut'
       });
     })
