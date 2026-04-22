@@ -2,6 +2,43 @@
    PORTFOLIO SCRIPT — Paul Nehme Tekle
 ════════════════════════════════════════ */
 
+/* ─── Splash intro ───────────────────────── */
+(function initSplash() {
+  const splash     = document.getElementById('splash');
+  const tag        = document.getElementById('splash-tag');
+  const name1      = document.getElementById('splash-name-1');
+  const name2      = document.getElementById('splash-name-2');
+  const role       = document.getElementById('splash-role');
+  const wipe       = document.getElementById('splash-wipe');
+
+  document.body.classList.add('splash-active');
+
+  const tl = gsap.timeline();
+
+  // 1 — tag drops in and bounces
+  tl.to(tag, { opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.7)', delay: 0.2 })
+  // 2 — name lines rise up
+    .to([name1, name2], {
+      opacity: 1, y: 0,
+      duration: 0.6, stagger: 0.12, ease: 'power3.out'
+    }, '-=0.1')
+  // 3 — role fades in
+    .to(role, { opacity: 1, duration: 0.4, ease: 'power2.out' }, '-=0.2')
+  // 4 — hold for a beat
+    .to({}, { duration: 0.7 })
+  // 5 — red wipe sweeps up covering everything
+    .to(wipe, { scaleY: 1, duration: 0.55, ease: 'power3.inOut' })
+  // 6 — wipe exits upward, revealing site
+    .to(wipe, {
+      scaleY: 0, transformOrigin: 'top',
+      duration: 0.55, ease: 'power3.inOut',
+      onComplete() {
+        splash.remove();
+        document.body.classList.remove('splash-active');
+      }
+    });
+})();
+
 /* ─── Smooth scroll (Lenis) ─────────────── */
 const lenis = new Lenis({
   duration: 1.2,
