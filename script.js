@@ -264,7 +264,6 @@ mobileMenu.querySelectorAll('a').forEach(a => {
     'Full Stack Developer',
     'Technical Lead',
     'AI Systems Builder',
-    'Blockchain Engineer',
     'Problem Solver',
   ];
   let pIdx = 0, cIdx = 0, deleting = false;
