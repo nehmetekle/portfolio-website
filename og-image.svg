@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#080b14"/>
+
+  <!-- Subtle grid lines -->
+  <line x1="0" y1="315" x2="1200" y2="315" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+  <line x1="600" y1="0" x2="600" y2="630" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+
+  <!-- Glow accent top-left -->
+  <ellipse cx="120" cy="100" rx="260" ry="180" fill="rgba(255,51,77,0.07)"/>
+  <!-- Glow accent bottom-right -->
+  <ellipse cx="1080" cy="530" rx="260" ry="180" fill="rgba(255,51,77,0.05)"/>
+
+  <!-- Border frame -->
+  <rect x="40" y="40" width="1120" height="550" rx="16" stroke="rgba(255,255,255,0.07)" stroke-width="1.5" fill="none"/>
+
+  <!-- Tag mark top-left -->
+  <text x="80" y="118"
+    font-family="ui-monospace, 'Courier New', monospace"
+    font-size="52" font-weight="400" fill="#ff334d" letter-spacing="2">&lt;/&gt;</text>
+
+  <!-- Available badge -->
+  <rect x="80" y="148" width="224" height="30" rx="15" fill="rgba(255,51,77,0.12)" stroke="rgba(255,51,77,0.25)" stroke-width="1"/>
+  <circle cx="102" cy="163" r="5" fill="#ff334d"/>
+  <text x="116" y="168"
+    font-family="ui-monospace, 'Courier New', monospace"
+    font-size="13" fill="rgba(255,255,255,0.6)" letter-spacing="1.5">AVAILABLE FOR HIRE</text>
+
+  <!-- Name -->
+  <text x="80" y="310"
+    font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
+    font-size="96" font-weight="900" fill="#ffffff" letter-spacing="-3">Paul Nehme</text>
+  <text x="80" y="410"
+    font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
+    font-size="96" font-weight="900" fill="#ff334d" letter-spacing="-3">Tekle</text>
+
+  <!-- Tagline -->
+  <text x="80" y="466"
+    font-family="ui-monospace, 'Courier New', monospace"
+    font-size="20" fill="rgba(255,255,255,0.4)" letter-spacing="2">// Full Stack Developer · Agentic AI · Blockchain Systems</text>
+
+  <!-- Divider -->
+  <line x1="80" y1="495" x2="1120" y2="495" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+  <!-- URL bottom -->
+  <text x="80" y="540"
+    font-family="ui-monospace, 'Courier New', monospace"
+    font-size="18" fill="rgba(255,255,255,0.25)" letter-spacing="1">paulnehmetekle.com</text>
+
+  <!-- Location bottom-right -->
+  <circle cx="958" cy="533" r="5" fill="#ff334d" opacity="0.7"/>
+  <text x="972" y="540"
+    font-family="ui-monospace, 'Courier New', monospace"
+    font-size="18" fill="rgba(255,255,255,0.25)" letter-spacing="1">Paris, France</text>
+</svg>
