@@ -771,6 +771,13 @@ body:has(button:hover) .cursor-follower::before {
   color: var(--red);
   letter-spacing: 0.04em;
 }
+.pcard-tag-etc {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: var(--text-muted) !important;
+  padding-left: 4px !important;
+  letter-spacing: 0.02em !important;
+}
 
 /* Responsive path */
 @media (max-width: 900px) {
