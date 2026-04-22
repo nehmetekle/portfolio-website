@@ -37,7 +37,7 @@
   <!-- Tagline -->
   <text x="80" y="466"
     font-family="ui-monospace, 'Courier New', monospace"
-    font-size="20" fill="rgba(255,255,255,0.4)" letter-spacing="2">// Full Stack Developer · Agentic AI · Blockchain Systems</text>
+    font-size="20" fill="rgba(255,255,255,0.4)" letter-spacing="2">// Full Stack Developer · Agentic AI · Artificial Intelligence</text>
 
   <!-- Divider -->
   <line x1="80" y1="495" x2="1120" y2="495" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
