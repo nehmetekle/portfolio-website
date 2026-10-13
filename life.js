@@ -416,7 +416,7 @@ const LIFE = (() => {
     setTimeout(() => toast('👋', 'Paul', 'Thanks for stopping by! Everything here is clickable — even the robot.'), 2600);
     setTimeout(() => {
       if (!opened.has('contact')) {
-        toast('💼', 'Hiring?', 'Paul is in alternance at Aether and open to full-time roles after it. Click to get in touch →', { onClick: () => openApp('contact'), ms: 8000 });
+        toast('💼', 'Hiring?', 'Paul joins Aether in alternance from October 2026 and is open to full-time roles after it. Click to get in touch →', { onClick: () => openApp('contact'), ms: 8000 });
       }
     }, 40_000);
   }

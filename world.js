@@ -123,6 +123,7 @@ function openApp(id, origin) {
   else if (id === 'game') body.appendChild(GAME.create(win));
   else body.appendChild(document.getElementById(app.tpl).content.cloneNode(true));
   if (PHOTO_URL) body.querySelectorAll('img[data-photo]').forEach(img => (img.src = PHOTO_URL));
+  body.querySelectorAll('[data-start]').forEach(showStartDate);
   if (id === 'message') setupMessage(body.querySelector('.mail'));
 
   // Size + cascade position, kept inside the desktop
@@ -264,6 +265,15 @@ document.addEventListener('keydown', e => {
 
 document.getElementById('taskbar-start').addEventListener('click', () => openApp('terminal'));
 
+// "Starts 26 Oct 2026" before the start date, "Oct 2026 — Present" from then on
+function showStartDate(el) {
+  const start = new Date(`${el.dataset.start}T00:00:00`);
+  const fmt = opts => start.toLocaleDateString('en-GB', opts);
+  el.textContent = new Date() < start
+    ? `Starts ${fmt({ day: 'numeric', month: 'short', year: 'numeric' })}`
+    : `${fmt({ month: 'short', year: 'numeric' })} — Present`;
+}
+
 /* ─── Message app ────────────────────────── */
 function setupMessage(form) {
   const note = form.querySelector('.mail-note');
@@ -380,7 +390,7 @@ const COMMANDS = {
     '<span class="muted">tips: ↑/↓ for history · Tab to autocomplete · Esc closes a window</span>',
   ].join('\n'),
 
-  whoami: () => 'Paul Nehme Tekle — Software Engineer\nParis, France · alternance at Aether Financial Services + Master\'s at Éstiam\n<span class="muted">type `about` for the long version</span>',
+  whoami: () => 'Paul Nehme Tekle — Software Engineer\nParis, France · alternance at Aether Financial Services (from Oct 2026) + Master\'s at Éstiam\n<span class="muted">type `about` for the long version</span>',
 
   ls: () => Object.values(APPS).map(a => a.title).join('    '),
 
