@@ -242,21 +242,21 @@
 
   <template id="tpl-projects">
     <div class="doc">
-      <p class="doc-kicker">// projects/ — open source ones link to GitHub</p>
+      <p class="doc-kicker">// projects/</p>
 
       <article class="project">
-        <div class="project-head"><span class="project-num">01</span><h3>SentimentAI — CI/CD &amp; Monitoring Pipeline</h3></div>
-        <p class="mission-role">DevOps · Python</p>
-        <p>A FastAPI sentiment service wrapped in a complete delivery pipeline: Jenkins lints, tests and builds every commit, pushes the image to GitHub Container Registry, Terraform deploys it, and Prometheus watches it with alerting.</p>
-        <div class="flow" aria-label="Pipeline">
-          <span>git push</span><i>→</i><span>Jenkins: lint · test · build</span><i>→</i><span>GHCR image</span><i>→</i><span>Terraform deploy</span><i>→</i><span>Prometheus + alerts</span>
+        <div class="project-head"><span class="project-num">01</span><h3>NutriClinic — Clinic Management System</h3></div>
+        <p class="mission-role">Full-stack · private client project</p>
+        <p>A management system for a nutrition clinic: clients, packages, appointments, consultations, payments, expenses, staff and an audit log. Built in stages — a clickable demo first, then a real REST API and database.</p>
+        <div class="flow" aria-label="Architecture">
+          <span>React UI</span><i>→</i><span>Next.js API routes</span><i>→</i><span>zod validation</span><i>→</i><span>Prisma</span><i>→</i><span>PostgreSQL</span>
         </div>
-        <div class="chips"><span>FastAPI</span><span>Docker</span><span>Jenkins</span><span>Terraform</span><span>Prometheus</span></div>
-        <div class="project-links"><a href="https://github.com/nehmetekle/sentiment-ai" target="_blank" rel="noopener">GitHub ↗</a></div>
+        <div class="chips"><span>Next.js</span><span>TypeScript</span><span>Prisma</span><span>PostgreSQL</span><span>REST</span></div>
+        <p class="doc-muted">🔒 Private — the code and the live app aren't public.</p>
       </article>
 
       <article class="project">
-        <div class="project-head"><span class="project-num">02</span><h3>Cryptocurrency Driver Reward System</h3></div>
+        <div class="project-head"><span class="project-num">02</span><h3>WCN — Cryptocurrency Driver Reward System</h3></div>
         <p class="mission-role">Final Year Project · 2023 — 2024</p>
         <p>A full-stack blockchain platform that automatically rewards drivers for safe, efficient driving behavior. Smart contracts on Ethereum handle reward distribution; real-time GPS tracking via Google Maps captures performance data; native mobile app delivers the experience seamlessly.</p>
         <div class="flow" aria-label="Architecture">
@@ -266,45 +266,11 @@
       </article>
 
       <article class="project">
-        <div class="project-head"><span class="project-num">03</span><h3>Agentic AI Dev Workflow</h3></div>
-        <p class="mission-role">YOOVO · 2024</p>
-        <p>Designed and deployed an AI agent system that automates repetitive development tasks — code generation, test scaffolding, and deployment — dramatically reducing feature delivery time across the engineering team.</p>
-        <div class="chips"><span>Agentic AI</span><span>Python</span><span>Automation</span><span>LLMs</span></div>
-      </article>
-
-      <article class="project">
-        <div class="project-head"><span class="project-num">04</span><h3>ML Movie Recommender</h3></div>
-        <p class="mission-role">Machine Learning · Python</p>
-        <p>A recommendation engine trained on MovieLens ratings with matrix factorization (SVD), served as a FastAPI endpoint that returns a user's top picks, and packaged with Docker.</p>
-        <div class="flow" aria-label="Pipeline">
-          <span>MovieLens ratings</span><i>→</i><span>SVD training</span><i>→</i><span>model.pkl</span><i>→</i><span>FastAPI /recommend</span><i>→</i><span>Docker</span>
-        </div>
-        <div class="chips"><span>Python</span><span>scikit-surprise</span><span>FastAPI</span><span>Docker</span></div>
-        <div class="project-links"><a href="https://github.com/nehmetekle/ML-movie-rec" target="_blank" rel="noopener">GitHub ↗</a></div>
-      </article>
-
-      <article class="project">
-        <div class="project-head"><span class="project-num">05</span><h3>Stock Management</h3></div>
-        <p class="mission-role">Full-stack · Angular + PHP</p>
-        <p>Stock management for a shop: products, categories, suppliers, business rules, filtering and per-supplier stock summaries — an Angular frontend with NgRx state talking to a CodeIgniter REST API.</p>
-        <div class="flow" aria-label="Architecture">
-          <span>Angular</span><i>→</i><span>NgRx store &amp; effects</span><i>→</i><span>CodeIgniter 4 REST API</span><i>→</i><span>MySQL</span>
-        </div>
-        <div class="chips"><span>Angular</span><span>NgRx</span><span>CodeIgniter 4</span><span>MySQL</span></div>
-        <div class="project-links">
-          <a href="https://github.com/nehmetekle/stock-management-frontend" target="_blank" rel="noopener">Frontend ↗</a>
-          <a href="https://github.com/nehmetekle/stock-management-backend" target="_blank" rel="noopener">Backend ↗</a>
-        </div>
-      </article>
-
-      <article class="project">
-        <div class="project-head"><span class="project-num">06</span><h3>Full-Stack Client Work</h3></div>
-        <p class="mission-role">Freelance</p>
+        <div class="project-head"><span class="project-num">03</span><h3>Freelance Projects</h3></div>
+        <p class="mission-role">Freelance · 2023 — Present</p>
         <p>Production-grade web and mobile applications built end-to-end for clients spanning e-commerce, SaaS dashboards, and bespoke business tools — all delivered from design through deployment.</p>
-        <div class="chips"><span>React Native</span><span>Django</span><span>FastAPI</span><span>Laravel</span></div>
+        <div class="chips"><span>Angular</span><span>React Native</span><span>Laravel</span><span>Django</span><span>FastAPI</span><span>Ionic</span></div>
       </article>
-
-      <p class="doc-muted">More on <a href="https://github.com/nehmetekle" target="_blank" rel="noopener">github.com/nehmetekle ↗</a></p>
     </div>
   </template>
 
@@ -381,7 +347,7 @@
   </template>
 
   <script src="fx.js?v=5"></script>
-  <script src="life.js?v=6"></script>
+  <script src="life.js?v=7"></script>
   <script src="friends.js?v=2"></script>
   <script src="game.js?v=2"></script>
   <script src="world.js?v=12"></script>

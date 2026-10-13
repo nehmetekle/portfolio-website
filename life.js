@@ -134,7 +134,7 @@ const LIFE = (() => {
   const OPEN_LINES = {
     about:     'That\'s Paul! He\'s cool, I promise.',
     career:    'YOOVO → where the AI magic happens ✨',
-    projects:  'The crypto one is my favourite 🚗💰',
+    projects:  'WCN is my favourite — crypto for good drivers 🚗💰',
     skills:    'So many skills. I only know "beep".',
     education: 'Master\'s at Éstiam — Paul never stops learning 🎓',
     contact:   'Yes! Say hi to Paul 👋',
