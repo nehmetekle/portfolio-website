@@ -77,7 +77,7 @@ const LIFE = (() => {
     [7,  '☕ Paul is making coffee'],
     [9,  '💻 Paul is shipping features'],
     [12, '🍝 Paul is at lunch'],
-    [14, '🧩 Paul is coding in Angular & CodeIgniter'],
+    [14, '🧑‍🍳 Paul is cooking stuff'],
     [18, '📚 Paul is studying for his Master\'s'],
     [20, '🌙 Paul is hacking on side projects'],
   ];
