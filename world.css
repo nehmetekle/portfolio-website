@@ -535,7 +535,8 @@ body.world {
 .power-sub { margin-top: -12px; color: var(--text-dim); font-size: 0.72rem; }
 
 /* ── Glitch on "access granted" ───────── */
-.power.glitch { animation: glitch 0.38s steps(2) both; }
+/* Only the screen content glitches; the black overlay itself never moves, so the desktop can't peek through */
+.power.glitch .power-screen { animation: glitch 0.38s steps(2) both; }
 .power.glitch .login { text-shadow: 3px 0 rgba(255,51,77,0.9), -3px 0 rgba(80,200,255,0.8); }
 @keyframes glitch {
   0%   { transform: none; filter: none; }
@@ -729,3 +730,6 @@ body.world {
 .sr-profile p, .sr-profile li { margin-top: 8px; color: var(--text-muted); }
 .sr-profile ul { padding-left: 20px; list-style: disc; }
 .sr-profile a { color: var(--red); }
+
+/* Keep the city hidden behind the login screen; it's revealed by the fade-out */
+.world:has(.power:not(.off)) .wallpaper { visibility: hidden; }
