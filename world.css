@@ -612,55 +612,11 @@ body.world {
 }
 .project-links a:hover { border-color: var(--red); background: var(--red-dim); text-decoration: none !important; }
 
-/* ── Message app ──────────────────────── */
+/* ── Contact buttons ──────────────────── */
 .btn-ghost { border: 1px solid var(--border-hi); color: var(--text); }
 .btn-ghost:hover { border-color: var(--red); color: #fff; }
 .contact-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 
-.mail { position: relative; }
-.mail-to, .mail-field {
-  display: grid;
-  grid-template-columns: 70px 1fr;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-}
-.mail-to span, .mail-field span { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); }
-.mail-to b { font-weight: 500; color: var(--text); }
-.mail input, .mail textarea {
-  width: 100%;
-  background: none;
-  border: 0;
-  outline: 0;
-  font: inherit;
-  color: #fff;
-}
-.mail input::placeholder, .mail textarea::placeholder { color: var(--text-dim); }
-.mail textarea {
-  display: block;
-  min-height: 140px;
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: rgba(5,7,13,0.5);
-  resize: vertical;
-  line-height: 1.5;
-}
-.mail textarea:focus, .mail-field:focus-within { border-color: rgba(255,51,77,0.5); }
-.mail-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-.mail-note { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); }
-.mail-note a { color: var(--red); }
-.plane { display: inline-block; }
-.mail.sending .plane { animation: fly 0.7s cubic-bezier(0.5, 0, 0.8, 0.4) forwards; }
-@keyframes fly {
-  to { transform: translate(340px, -260px) rotate(-20deg) scale(1.6); opacity: 0; }
-}
-.mail.sent > :not(.mail-done) { display: none; }
-.mail-done { padding: 40px 10px; text-align: center; animation: bubble 0.4s var(--ease-out); }
-.mail-done > * + * { margin-top: 10px; }
-.mail-done-icon { font-size: 3rem; line-height: 1; }
-.mail-done-title { font-size: 1.4rem !important; }
-.desk-icon[data-app="message"] .desk-glyph { color: var(--red); }
 
 /* ── Optional photo ───────────────────── */
 .polaroid { display: none; }

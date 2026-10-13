@@ -71,7 +71,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="os.css?v=3" />
-  <link rel="stylesheet" href="world.css?v=11" />
+  <link rel="stylesheet" href="world.css?v=12" />
   <link rel="stylesheet" href="life.css?v=5" />
 </head>
 <body class="world">
@@ -261,9 +261,15 @@
       </article>
 
       <article class="project">
-        <div class="project-head"><span class="project-num">02</span><h3>WCN — Cryptocurrency Driver Reward System</h3></div>
-        <p class="mission-role">Final Year Project · 2023 — 2024</p>
-        <p>A full-stack blockchain platform that automatically rewards drivers for safe, efficient driving behavior. Smart contracts on Ethereum handle reward distribution; real-time GPS tracking via Google Maps captures performance data; native mobile app delivers the experience seamlessly.</p>
+        <div class="project-head"><span class="project-num">02</span><h3>WCN · Wheel In Crypto</h3></div>
+        <p class="mission-role">Final Year Project · Cryptocurrency &amp; Driver Reward System · 2023 — 2024</p>
+        <p>A platform that automatically rewards drivers in cryptocurrency for safe, efficient driving.</p>
+        <ul class="doc-list">
+          <li>Full-stack architecture: Angular + .NET (web) and Angular Ionic + .NET (mobile)</li>
+          <li>Smart contracts for automatic rewards based on driving behavior</li>
+          <li>Precise GPS tracking via Google Maps</li>
+          <li>Complete project management from front-end to blockchain back-end</li>
+        </ul>
         <div class="flow" aria-label="Architecture">
           <span>Ionic mobile app</span><i>→</i><span>GPS tracking</span><i>→</i><span>.NET API</span><i>→</i><span>Solidity smart contract</span><i>→</i><span>crypto reward</span>
         </div>
@@ -324,37 +330,16 @@
         <a href="uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf" target="_blank" rel="noopener"><span>CV</span>Download PDF ↗</a>
       </div>
       <div class="contact-actions">
-        <button class="btn btn-primary" type="button" data-open="message">Write me a message ✎</button>
+        <a class="btn btn-primary" href="mailto:Nehmehabib@hotmail.com">Email me ✉</a>
         <button class="btn btn-ghost copy-email" type="button" data-email="Nehmehabib@hotmail.com">Copy email</button>
       </div>
     </div>
   </template>
 
-  <template id="tpl-message">
-    <form class="doc mail" novalidate>
-      <p class="doc-kicker">// message.app</p>
-      <div class="mail-to"><span>To</span><b>Paul Nehme Tekle</b></div>
-      <label class="mail-field"><span>Name</span><input name="name" required autocomplete="name" placeholder="Your name" /></label>
-      <label class="mail-field"><span>Email</span><input name="email" type="email" required autocomplete="email" placeholder="you@company.com" /></label>
-      <label class="mail-field"><span>Subject</span><input name="subject" placeholder="Let's work together" /></label>
-      <textarea name="message" required rows="6" placeholder="Hi Paul, …" aria-label="Message"></textarea>
-      <div class="mail-actions">
-        <button class="btn btn-primary mail-send" type="submit">Send <span class="plane" aria-hidden="true">✈</span></button>
-        <span class="mail-note" aria-live="polite"></span>
-      </div>
-      <div class="mail-done" hidden>
-        <p class="mail-done-icon">📨</p>
-        <h3 class="mail-done-title"></h3>
-        <p class="mail-done-text"></p>
-        <button class="btn btn-ghost mail-again" type="button">Write another</button>
-      </div>
-    </form>
-  </template>
-
   <script src="fx.js?v=5"></script>
-  <script src="life.js?v=9"></script>
+  <script src="life.js?v=10"></script>
   <script src="friends.js?v=2"></script>
   <script src="game.js?v=2"></script>
-  <script src="world.js?v=15"></script>
+  <script src="world.js?v=16"></script>
 </body>
 </html>
