@@ -295,8 +295,6 @@ const HELP = [
   ['history',     'history',       'commands you ran'],
   ['achievements', 'achievements', 'your progress (10 to find)'],
   ['weather',     'weather',       'live weather in Paris'],
-  ['beirut',      'beirut',        'switch the wallpaper to Beirut 🇱🇧'],
-  ['paris',       'paris',         'switch the wallpaper to Paris 🗼'],
   ['bugs',        'bugs',          'how many bugs got fixed'],
   ['byte',        'byte',          'call Byte over'],
   ['matrix',      'matrix',        'follow the white rabbit'],
@@ -351,8 +349,6 @@ const COMMANDS = {
 
   play: () => { openApp('game'); return '<span class="muted">launching byte-runner.exe… press space to jump</span>'; },
   weather: () => FRIENDS.weatherReport(),
-  beirut: () => (SKYLINE.setCity('beirut') ? 'wallpaper → Beirut 🇱🇧  <span class="muted">(Raouché, Mount Lebanon, a cedar)</span>' : '<span class="muted">already in Beirut 🇱🇧</span>'),
-  paris: () => (SKYLINE.setCity('paris') ? 'wallpaper → Paris 🗼' : '<span class="muted">already in Paris 🗼</span>'),
   bugs: () => FRIENDS.bugsReport(),
   byte: () => { LIFE.pet.poke(); return '<span class="muted">Byte: beep boop! 🤖</span>'; },
 
@@ -378,7 +374,6 @@ const COMMANDS = {
 });
 Object.assign(COMMANDS, {
   experience: COMMANDS.career, work: COMMANDS.career, projects: COMMANDS.career, hire: COMMANDS.contact,
-  lebanon: COMMANDS.beirut, france: COMMANDS.paris,
   logout: COMMANDS.exit, reboot: COMMANDS.exit, game: COMMANDS.play, '?': COMMANDS.help,
 });
 

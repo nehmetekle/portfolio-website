@@ -329,27 +329,3 @@ button.toast:hover { border-color: var(--red); }
   .toast:nth-last-child(n+3) { display: none; }
 }
 
-/* ── Beirut clock + wallpaper city switch ── */
-.widget-cities {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 8px;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px dashed var(--border-hi);
-}
-.widget-beirut { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; }
-.widget-beirut b { color: var(--text); font-weight: 500; }
-.city-switch { display: flex; border: 1px solid var(--border-hi); border-radius: 999px; overflow: hidden; }
-.city-switch button { flex: 1; }
-.city-switch button {
-  padding: 4px 9px;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--text-muted);
-  white-space: nowrap;
-  transition: background 0.2s, color 0.2s;
-}
-.city-switch button:hover { color: #fff; }
-.city-switch button.active { background: var(--red); color: #080b14; }

@@ -90,24 +90,7 @@ const LIFE = (() => {
     document.getElementById('w-time').textContent = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' });
     document.getElementById('w-date').textContent = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Europe/Paris' }) + ' · Paris';
     document.getElementById('w-status').textContent = ROUTINE.filter(([h]) => hour >= h).pop()[1];
-    document.getElementById('w-beirut').textContent = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Beirut' });
   }
-
-  // Paris ⇄ Beirut wallpaper switch in the clock widget
-  function showCity() {
-    document.querySelectorAll('.city-switch button').forEach(b => b.classList.toggle('active', b.dataset.city === SKYLINE.getCity()));
-  }
-  document.querySelectorAll('.city-switch button').forEach(b => b.addEventListener('click', () => {
-    if (SKYLINE.setCity(b.dataset.city)) FX.sfx.open();
-  }));
-  document.addEventListener('pnt:city', e => {
-    showCity();
-    if (!pet.el) return;
-    pet.say(e.detail.city === 'beirut'
-      ? 'Marhaba! 🇱🇧 Welcome to Beirut — Raouché, Mount Lebanon and a cedar'
-      : 'Bonjour Paris! 🗼 Back to the Eiffel Tower');
-  });
-  showCity();
 
   /* ─── Byte, the desktop robot ──────────── */
   const SPRITE = `
