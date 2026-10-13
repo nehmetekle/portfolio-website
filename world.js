@@ -24,6 +24,7 @@ const APPS = {
   terminal:  { title: 'terminal',    glyph: '>_', w: 580, h: 600 },
   game:      { title: 'byte-runner.exe', glyph: '▶', w: 660, h: 340 },
   cv:        { title: 'CV.pdf',      glyph: '⇩',  href: CV_URL },
+  cvfr:      { title: 'CV (FR).pdf', glyph: '⇩',  href: CV_FR_URL },
 };
 
 const desktop     = document.getElementById('desktop');

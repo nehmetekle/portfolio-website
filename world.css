@@ -105,7 +105,8 @@ body.world {
 }
 .desk-icon[data-app="terminal"] .desk-glyph { color: var(--green); }
 .desk-icon[data-app="contact"] .desk-glyph,
-.desk-icon[data-app="cv"] .desk-glyph { color: var(--red); }
+.desk-icon[data-app="cv"] .desk-glyph,
+.desk-icon[data-app="cvfr"] .desk-glyph { color: var(--red); }
 
 /* ── Windows ──────────────────────────── */
 .win {
@@ -698,3 +699,9 @@ body.world {
 .sub-project > * + * { margin-top: 8px; }
 .sub-project h4 { font-family: var(--font-display); font-size: 0.98rem; color: #fff; }
 .tag-private, .tag-date { margin-left: 6px; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 400; color: var(--orange); white-space: nowrap; }
+
+/* Laptops: keep all desktop icons in a single column when there's room */
+@media (min-width: 721px) {
+  .desktop-icons { top: 12px; gap: 0 8px; }
+  .desk-icon { width: 104px; padding: 6px 2px 5px; gap: 4px; white-space: nowrap; }
+}

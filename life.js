@@ -136,6 +136,7 @@ const LIFE = (() => {
     skills:    'So many skills. I only know "beep".',
     education: 'Master\'s at Éstiam — Paul never stops learning 🎓',
     contact:   'Yes! Say hi to Paul 👋',
+    cvfr:      'Ah, la version française ! Très chic 🇫🇷',
     cv:        'A recruiter?! Quick, everybody look professional!',
     terminal:  'Type <code>help</code> if you get lost!',
     game:      'That\'s me in there! 🎮 Don\'t let me die!',
@@ -427,7 +428,7 @@ const LIFE = (() => {
     const { id } = e.detail;
     opened.add(id);
     if (id === 'contact') unlock('networker');
-    if (id === 'cv') unlock('recruiter');
+    if (id === 'cv' || id === 'cvfr') unlock('recruiter');
     if (opened.size >= 4) unlock('explorer');
     if (pet.el) pet.react(id);
   });
