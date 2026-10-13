@@ -3,16 +3,30 @@
 ════════════════════════════════════════ */
 
 const CV_URL = 'uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf';
+const GITHUB_URL = 'https://github.com/nehmetekle';
+
+// Messages: with no endpoint the visitor's email app opens with the message filled in.
+// Paste a Formspree form URL (https://formspree.io → New form) to send straight to your inbox instead.
+const FORM_ENDPOINT = '';
+const EMAIL = 'Nehmehabib@hotmail.com';
+
+// Photo: put one in uploads/ and set its path here, e.g. 'uploads/photo.jpg'
+const PHOTO_URL = '';
+if (PHOTO_URL) {
+  document.body.classList.add('has-photo');
+  document.querySelectorAll('img[data-photo]').forEach(img => (img.src = PHOTO_URL));
+}
 
 // Desktop apps. `tpl` points at a <template> in index.html; `href` opens a link instead of a window.
 const APPS = {
   readme:    { title: 'welcome.md',  glyph: '✦',  tpl: 'tpl-readme',    w: 440, h: 400 },
   about:     { title: 'about.txt',   glyph: '▣',  tpl: 'tpl-about',     w: 540, h: 520 },
   career:    { title: 'career/',     glyph: '▤',  tpl: 'tpl-career',    w: 620, h: 580 },
-  projects:  { title: 'projects/',   glyph: '◆',  tpl: 'tpl-projects',  w: 620, h: 580 },
+  projects:  { title: 'projects/',   glyph: '◆',  tpl: 'tpl-projects',  w: 700, h: 640 },
   skills:    { title: 'skills.sh',   glyph: '❯',  tpl: 'tpl-skills',    w: 580, h: 540 },
   education: { title: 'education/',  glyph: '◎',  tpl: 'tpl-education', w: 480, h: 320 },
-  contact:   { title: 'contact.app', glyph: '✉',  tpl: 'tpl-contact',   w: 500, h: 500 },
+  contact:   { title: 'contact.app', glyph: '✉',  tpl: 'tpl-contact',   w: 500, h: 540 },
+  message:   { title: 'message.app', glyph: '✎',  tpl: 'tpl-message',   w: 520, h: 560 },
   terminal:  { title: 'terminal',    glyph: '>_', w: 580, h: 600 },
   game:      { title: 'byte-runner.exe', glyph: '▶', w: 660, h: 340 },
   cv:        { title: 'CV.pdf',      glyph: '⇩',  href: CV_URL },
@@ -108,6 +122,8 @@ function openApp(id, origin) {
   if (id === 'terminal') body.appendChild(createTerminal());
   else if (id === 'game') body.appendChild(GAME.create(win));
   else body.appendChild(document.getElementById(app.tpl).content.cloneNode(true));
+  if (PHOTO_URL) body.querySelectorAll('img[data-photo]').forEach(img => (img.src = PHOTO_URL));
+  if (id === 'message') setupMessage(body.querySelector('.mail'));
 
   // Size + cascade position, kept inside the desktop
   const dw = desktop.clientWidth, dh = desktop.clientHeight;
@@ -248,6 +264,73 @@ document.addEventListener('keydown', e => {
 
 document.getElementById('taskbar-start').addEventListener('click', () => openApp('terminal'));
 
+/* ─── Message app ────────────────────────── */
+function setupMessage(form) {
+  const note = form.querySelector('.mail-note');
+  const send = form.querySelector('.mail-send');
+  const done = form.querySelector('.mail-done');
+  const idleNote = FORM_ENDPOINT ? '' : 'opens your email app, ready to send';
+  note.textContent = idleNote;
+  form.addEventListener('input', () => (note.textContent = idleNote));
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const firstInvalid = [...form.elements].find(el => el.willValidate && !el.checkValidity());
+    if (firstInvalid) {
+      FX.sfx.error();
+      note.textContent = firstInvalid.name === 'email' ? 'that email doesn\'t look right' : `please fill in your ${firstInvalid.name}`;
+      firstInvalid.focus();
+      return;
+    }
+    const data = Object.fromEntries(new FormData(form));
+    const subject = data.subject || `Hello from ${data.name}`;
+
+    if (FORM_ENDPOINT) {
+      send.disabled = true;
+      note.textContent = 'sending…';
+      try {
+        const res = await fetch(FORM_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ ...data, _subject: subject }),
+        });
+        if (!res.ok) throw new Error(res.status);
+      } catch {
+        FX.sfx.error();
+        note.innerHTML = `couldn't send — email me at <a href="mailto:${EMAIL}">${EMAIL}</a>`;
+        send.disabled = false;
+        return;
+      }
+    } else {
+      const body = `${data.message}\n\n— ${data.name} (${data.email})`;
+      location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    // Paper plane takes off, then the thank-you screen
+    form.classList.add('sending');
+    FX.sfx.whoosh();
+    setTimeout(() => {
+      form.classList.remove('sending');
+      form.classList.add('sent');
+      done.hidden = false;
+      done.querySelector('.mail-done-title').textContent = FORM_ENDPOINT ? `Thanks, ${data.name}!` : 'Almost there!';
+      done.querySelector('.mail-done-text').textContent = FORM_ENDPOINT
+        ? 'Your message is in Paul\'s inbox. He\'ll get back to you soon.'
+        : 'Your email app opened with the message ready — just hit send there.';
+      send.disabled = false;
+      LIFE.unlock('penpal');
+      LIFE.pet.say(FORM_ENDPOINT ? 'Message delivered! 📨 Paul will reply soon' : 'Don\'t forget to hit send in your email app! 📨', 4000);
+    }, 700);
+  });
+
+  form.querySelector('.mail-again').addEventListener('click', () => {
+    form.reset();
+    form.classList.remove('sent');
+    done.hidden = true;
+    note.textContent = idleNote;
+  });
+}
+
 /* ─── Terminal ───────────────────────────── */
 function escapeHtml(s) {
   return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -267,12 +350,14 @@ const HELP = [
   ['education',   'education',     'open education/'],
   ['contact',     'contact',       'open contact.app'],
   ['cv',          'cv',            'download my CV'],
+  ['message',     'message',       'write me a message'],
+  ['github',      'github',        'open my GitHub'],
   ['ls',          'ls',            'list desktop files'],
   ['open <file>', 'open projects', 'open any desktop file'],
   ['play',        'play',          'play Byte Runner 🎮'],
   ['neofetch',    'neofetch',      'system info'],
   ['history',     'history',       'commands you ran'],
-  ['achievements', 'achievements', 'your progress (10 to find)'],
+  ['achievements', 'achievements', 'your progress (11 to find)'],
   ['weather',     'weather',       'live weather in Paris'],
   ['bugs',        'bugs',          'how many bugs got fixed'],
   ['byte',        'byte',          'call Byte over'],
@@ -319,6 +404,8 @@ const COMMANDS = {
   exit: () => { setTimeout(logout, 400); return 'logging out…'; },
 
   achievements: () => LIFE.achievementsReport(),
+  github: () => { window.open(GITHUB_URL, '_blank', 'noopener'); return `opening <a href="${GITHUB_URL}" target="_blank" rel="noopener">github.com/nehmetekle</a>…`; },
+
   play: () => { openApp('game'); return '<span class="muted">launching byte-runner.exe… press space to jump</span>'; },
   weather: () => FRIENDS.weatherReport(),
   bugs: () => FRIENDS.bugsReport(),
@@ -341,12 +428,12 @@ const COMMANDS = {
     return '<span class="muted">initiating hack.exe…</span>';
   },
 };
-['about', 'career', 'projects', 'skills', 'education', 'contact'].forEach(id => {
+['about', 'career', 'projects', 'skills', 'education', 'contact', 'message'].forEach(id => {
   COMMANDS[id] = () => { openApp(id); return `<span class="muted">opened ${APPS[id].title}</span>`; };
 });
 Object.assign(COMMANDS, {
   experience: COMMANDS.career, work: COMMANDS.career, hire: COMMANDS.contact,
-  logout: COMMANDS.exit, reboot: COMMANDS.exit, game: COMMANDS.play, '?': COMMANDS.help,
+  logout: COMMANDS.exit, reboot: COMMANDS.exit, game: COMMANDS.play, mail: COMMANDS.message, '?': COMMANDS.help,
 });
 
 function createTerminal() {

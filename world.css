@@ -583,3 +583,98 @@ body.world {
   text-align: center;
 }
 .desk-icon[data-app="game"] .desk-glyph { color: var(--green); }
+
+/* ── Project architecture strips + links ── */
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px dashed var(--border-hi);
+  border-radius: 6px;
+  background: rgba(5,7,13,0.6);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+.flow span { padding: 2px 8px; border-radius: 3px; background: rgba(56,189,248,0.1); color: #7dd3fc; }
+.flow i { font-style: normal; color: var(--red); }
+.project-links { display: flex; gap: 10px; }
+.project-links a {
+  padding: 5px 12px;
+  border: 1px solid var(--border-hi);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text) !important;
+  transition: border-color 0.2s, background 0.2s;
+}
+.project-links a:hover { border-color: var(--red); background: var(--red-dim); text-decoration: none !important; }
+
+/* ── Message app ──────────────────────── */
+.btn-ghost { border: 1px solid var(--border-hi); color: var(--text); }
+.btn-ghost:hover { border-color: var(--red); color: #fff; }
+.contact-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.mail { position: relative; }
+.mail-to, .mail-field {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.mail-to span, .mail-field span { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); }
+.mail-to b { font-weight: 500; color: var(--text); }
+.mail input, .mail textarea {
+  width: 100%;
+  background: none;
+  border: 0;
+  outline: 0;
+  font: inherit;
+  color: #fff;
+}
+.mail input::placeholder, .mail textarea::placeholder { color: var(--text-dim); }
+.mail textarea {
+  display: block;
+  min-height: 140px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: rgba(5,7,13,0.5);
+  resize: vertical;
+  line-height: 1.5;
+}
+.mail textarea:focus, .mail-field:focus-within { border-color: rgba(255,51,77,0.5); }
+.mail-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.mail-note { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); }
+.mail-note a { color: var(--red); }
+.plane { display: inline-block; }
+.mail.sending .plane { animation: fly 0.7s cubic-bezier(0.5, 0, 0.8, 0.4) forwards; }
+@keyframes fly {
+  to { transform: translate(340px, -260px) rotate(-20deg) scale(1.6); opacity: 0; }
+}
+.mail.sent > :not(.mail-done) { display: none; }
+.mail-done { padding: 40px 10px; text-align: center; animation: bubble 0.4s var(--ease-out); }
+.mail-done > * + * { margin-top: 10px; }
+.mail-done-icon { font-size: 3rem; line-height: 1; }
+.mail-done-title { font-size: 1.4rem !important; }
+.desk-icon[data-app="message"] .desk-glyph { color: var(--red); }
+
+/* ── Optional photo ───────────────────── */
+.polaroid { display: none; }
+.has-photo .polaroid {
+  display: block;
+  float: right;
+  width: 150px;
+  margin: 0 0 12px 18px;
+  padding: 8px 8px 10px;
+  background: #f4f1ea;
+  transform: rotate(3deg);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+}
+.polaroid img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+.polaroid figcaption { margin-top: 6px; font-family: 'Caveat', cursive; font-size: 1.05rem; color: #333; text-align: center; }
+.login-avatar { position: relative; overflow: hidden; }
+.login-avatar img { display: none; }
+.has-photo .login-avatar img { display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
