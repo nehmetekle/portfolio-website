@@ -683,3 +683,5 @@ body.world {
 /* Current job stands out in career/ */
 .mission-current { border-left-color: var(--green); }
 .mission-current .mission-head span { color: var(--green); }
+.doc h3 .company-link { color: #fff; }
+.doc h3 .company-link:hover { color: var(--red); text-decoration: none; }
