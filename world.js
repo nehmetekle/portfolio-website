@@ -479,7 +479,6 @@ window.addEventListener('hashchange', openFromHash);
 
 /* ─── Power on → boot log → login → desktop ── */
 function openStartupWindows() {
-  document.dispatchEvent(new CustomEvent('pnt:ready'));
   // Only the terminal opens, centred on the desktop (phones show it full screen)
   openApp('terminal');
   const term = windows.get('terminal').el;
@@ -487,7 +486,10 @@ function openStartupWindows() {
     term.style.left = `${Math.max(8, (desktop.clientWidth - term.offsetWidth) / 2)}px`;
     term.style.top  = `${Math.max(8, (desktop.clientHeight - term.offsetHeight) / 2)}px`;
   }
-  setTimeout(openFromHash, 260);
+  // Wake up the rest (Byte, widgets, weather, city animation) once the window has popped in,
+  // instead of everything starting in the same frame
+  setTimeout(() => document.dispatchEvent(new CustomEvent('pnt:ready')), 350);
+  setTimeout(openFromHash, 500);
 }
 
 /* ─── Live Paris wallpaper + sound toggle ── */
@@ -541,8 +543,11 @@ if (!SKYLINE.start(document.getElementById('wallpaper'))) {
     sessionStorage.setItem('pnt-logged-in', '1');
     document.removeEventListener('keydown', onKey);
     power.classList.add('off');
-    setTimeout(openStartupWindows, 350);
-    setTimeout(() => power.remove(), 1000);
+    // Start the desktop only once the fade is done, so the two don't fight for frames
+    setTimeout(() => {
+      power.remove();
+      openStartupWindows();
+    }, 600);
   }
   function onKey(e) {
     if (!['Enter', 'Escape', ' '].includes(e.key)) return;
@@ -611,6 +616,7 @@ if (!SKYLINE.start(document.getElementById('wallpaper'))) {
     at(t + 1750, async () => {
       login.hidden = true;
       finale.hidden = false;
+      finaleName.dataset.text = 'PAUL\nNEHME\nTEKLE';   // paint the hidden glow now, not when it lights up
       await FX.decrypt(finaleName, 'PAUL\nNEHME\nTEKLE', 1300, FX.sfx.tick);
       if (done) return;
       finale.classList.add('lit');

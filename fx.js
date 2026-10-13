@@ -95,9 +95,12 @@ const FX = (() => {
   function decrypt(el, text, duration = 1200, onTick) {
     return new Promise(resolve => {
       const start = performance.now();
-      let lastTick = 0;
+      let lastTick = 0, lastDraw = 0;
       function frame(now) {
         const p = Math.min(1, (now - start) / duration);
+        // ~20 updates a second looks the same and costs a third of the repaints
+        if (p < 1 && now - lastDraw < 48) { requestAnimationFrame(frame); return; }
+        lastDraw = now;
         const locked = Math.floor(p * text.length);
         el.textContent = [...text].map((ch, i) =>
           i < locked || /\s/.test(ch) ? ch : GLYPHS[(Math.random() * GLYPHS.length) | 0]
