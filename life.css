@@ -53,40 +53,6 @@
   color: var(--text);
 }
 
-.widget-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-.live-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 10px var(--green);
-  animation: live 2s ease-in-out infinite;
-}
-@keyframes live { 50% { opacity: 0.35; } }
-.widget-now li { font-size: 0.83rem; color: var(--text-muted); line-height: 1.45; }
-.widget-now li + li { margin-top: 8px; }
-.widget-now b { color: var(--orange); font-weight: 500; }
-.learning-bar {
-  display: block;
-  height: 4px;
-  margin-top: 7px;
-  border-radius: 2px;
-  background: repeating-linear-gradient(-45deg, var(--red) 0 6px, var(--orange) 6px 12px);
-  background-size: 34px 100%;
-  opacity: 0.8;
-  animation: stripes 1.2s linear infinite;
-}
-@keyframes stripes { to { background-position: 34px 0; } }
-
 .sticky {
   align-self: flex-end;
   width: 170px;
@@ -119,7 +85,6 @@
 }
 @media (max-width: 720px) {
   .widgets { top: 330px; left: 0; right: 0; margin: 0 auto; width: min(300px, calc(100% - 32px)); }
-  .widget-now { display: none; }
   .sticky { align-self: center; }
 }
 
@@ -180,6 +145,7 @@ button.toast:hover { border-color: var(--red); }
 .p-led { animation: led 1.6s steps(1) infinite; }
 @keyframes led { 50% { fill: #5a1a24; } }
 .p-core { animation: live 1.4s ease-in-out infinite; }
+@keyframes live { 50% { opacity: 0.35; } }
 
 .walking .pet-sprite { animation: bob 0.36s steps(2) infinite; }
 .walking .p-leg-l { animation: step 0.36s steps(1) infinite; }

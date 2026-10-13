@@ -337,7 +337,8 @@ body.world {
     flex-direction: row;
     justify-content: center;
   }
-  .desk-icon { width: 84px; }
+  .desk-icon { width: 78px; }
+  .desktop-icons { gap: 2px 6px; }
   .win {
     left: 6px !important;
     top: 6px !important;
