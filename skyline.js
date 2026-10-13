@@ -77,6 +77,12 @@ const SKYLINE = (() => {
   let canvas, c, W = 0, H = 0, scene = null;
   let cloudiness = 0.35, grey = 0;
   const mouse = { x: 0.5, tx: 0.5 };
+  const PAD = 10;   // extra art pixels on each side of a layer, room for mouse parallax
+
+  // Static parts (sky, buildings, tower) are drawn into these once and reused
+  const layers = { sky: null, far: null, tower: null, near: null };
+  let look = null;   // colours and positions computed with the layers
+  let lastRender = 0;
 
   function build() {
     const r = rng(1789);
@@ -85,17 +91,17 @@ const SKYLINE = (() => {
     const towerH = Math.round(Math.min(H * 0.58, W * 0.5));
     const towerHalf = Math.round(towerH * 0.21);
 
-    const stars = Array.from({ length: Math.round(W * H / 260) }, () => ({ x: r() * W, y: r() * H * 0.7, p: r() * 6, s: r() < 0.12 ? 2 : 1 }));
+    const stars = Array.from({ length: Math.round(W * H / 260) }, (_, i) => ({ x: Math.round(r() * W), y: Math.round(r() * H * 0.7), group: i % 4, s: r() < 0.12 ? 2 : 1 }));
 
     const far = [];
-    for (let x = -10; x < W + 20; ) {
+    for (let x = -PAD; x < W + PAD; ) {
       const w = 8 + Math.floor(r() * 14), h = Math.round(H * (0.12 + r() * 0.12));
       far.push({ x, w, h });
       x += w - 1;
     }
 
     const near = [];
-    for (let x = -6; x < W + 20; ) {
+    for (let x = -PAD; x < W + PAD; ) {
       const w = 14 + Math.floor(r() * 18), h = Math.round(H * (0.07 + r() * 0.11));
       // Leave the Champ de Mars open so the tower's legs show
       if (x + w > towerX - towerHalf - 6 && x < towerX + towerHalf + 6) { x = towerX + towerHalf + 7; continue; }
@@ -109,9 +115,19 @@ const SKYLINE = (() => {
       x += w + (r() < 0.2 ? 2 : 0);
     }
 
-    const clouds = Array.from({ length: 7 }, (_, i) => ({ x: r() * W * 1.4, y: H * (0.08 + r() * 0.3), w: 18 + r() * 30, speed: 0.6 + r() * 1.2, puffs: Array.from({ length: 4 }, () => [r(), r()]), visible: i / 7 }));
+    const clouds = Array.from({ length: 7 }, (_, i) => ({ x: r() * W * 1.4, y: Math.round(H * (0.08 + r() * 0.3)), w: Math.round(18 + r() * 30), speed: 0.6 + r() * 1.2, puffs: Array.from({ length: 4 }, () => [r(), r()]), visible: i / 7 }));
 
     scene = { ground, towerX, towerH, towerHalf, stars, far, near, clouds };
+  }
+
+  function makeLayer() {
+    const el = document.createElement('canvas');
+    el.width = W + PAD * 2;
+    el.height = H;
+    const ctx = el.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+    ctx.translate(PAD, 0);
+    return { el, ctx };
   }
 
   function resize() {
@@ -121,174 +137,203 @@ const SKYLINE = (() => {
     canvas.height = H;
     c.imageSmoothingEnabled = false;
     build();
+    for (const k in layers) layers[k] = makeLayer();
+    renderLayers();
+    draw(performance.now());
   }
 
-  /* ─── Drawing ──────────────────────────── */
-  function drawTower(x0, base, h, half, e, now, sparkle) {
-    const night = e < 0.02;
-    const lit = Math.min(1, Math.max(0, (0.1 - e) / 0.25));
-    const body = mix([58, 46, 66], [222, 160, 64], lit);
-    const lattice = mix([40, 32, 48], [150, 96, 34], lit);
-    const top = base - h;
-
+  /* ─── Static layers (refreshed every few seconds) ── */
+  function towerShape(t, x0, base, h, half, body, lattice) {
     for (let row = 0; row <= h; row++) {
       const f = row / h;
       const hw = Math.max(0.6, half * Math.pow(1 - f, 2.3));
       const y = base - row;
       const platform = Math.abs(f - 0.19) < 0.012 || Math.abs(f - 0.47) < 0.01;
-      for (let dx = -Math.ceil(hw + (platform ? 2 : 0)); dx <= Math.ceil(hw + (platform ? 2 : 0)); dx++) {
+      const reach = Math.ceil(hw + (platform ? 2 : 0));
+      for (let dx = -reach; dx <= reach; dx++) {
         // Arch between the legs
         if (f < 0.19 && !platform) {
           const archHalf = hw * 0.62 * Math.sqrt(Math.max(0, 1 - (f / 0.19) ** 2));
           if (Math.abs(dx) < archHalf) continue;
         }
         const edge = Math.abs(dx) > hw - 1;
-        c.fillStyle = css(platform || edge || (row + dx) % 3 ? body : lattice);
-        c.fillRect(x0 + dx, y, 1, 1);
+        t.fillStyle = platform || edge || (row + dx) % 3 ? body : lattice;
+        t.fillRect(x0 + dx, y, 1, 1);
       }
     }
-    // Antenna
-    c.fillStyle = css(body);
-    c.fillRect(x0, top - 6, 1, 6);
-    if (night) {
-      c.fillStyle = Math.floor(now / 700) % 2 ? '#ff334d' : '#7a1020';
-      c.fillRect(x0, top - 7, 1, 1);
-
-      // Rotating searchlight
-      const a = now / 2600;
-      const len = W * 0.45;
-      const reach = Math.cos(a);
-      const g = c.createLinearGradient(x0, top, x0 + reach * len, top);
-      g.addColorStop(0, 'rgba(255,236,170,0.32)');
-      g.addColorStop(1, 'rgba(255,236,170,0)');
-      c.fillStyle = g;
-      c.beginPath();
-      c.moveTo(x0, top - 3);
-      c.lineTo(x0 + reach * len, top - 3 - len * 0.05);
-      c.lineTo(x0 + reach * len, top - 3 + len * 0.05);
-      c.closePath();
-      c.fill();
-
-      // Hourly sparkle
-      if (sparkle) {
-        for (let i = 0; i < h * 0.9; i++) {
-          const row = Math.floor(Math.random() * h);
-          const hw = half * Math.pow(1 - row / h, 2.3);
-          c.fillStyle = Math.random() < 0.7 ? '#ffffff' : '#bfe3ff';
-          c.fillRect(x0 + Math.round((Math.random() * 2 - 1) * hw), base - row, 1, 1);
-        }
-      }
-    }
+    t.fillStyle = body;
+    t.fillRect(x0, base - h - 6, 1, 6);   // antenna
   }
 
-  function draw(now) {
+  function renderLayers() {
     if (!scene) return;
+    lastRender = performance.now();
     const clock = parisClock();
     const e = sunElevation(clock);
     const dark = Math.min(1, Math.max(0, (0.08 - e) / 0.3));   // 0 day … 1 night
-    const sparkle = dark > 0.6 && clock.minute < 5;
-    mouse.x += (mouse.tx - mouse.x) * 0.04;
-    const par = k => Math.round((mouse.x - 0.5) * k);
     const { ground, towerX, towerH, towerHalf } = scene;
 
-    // Sky (greyer when it's cloudy or raining)
+    // Sky (greyer when it's cloudy or raining), sun and moon
     let [top, bottom] = skyAt(e);
     if (grey) {
       const g = mix([110, 116, 128], [40, 44, 56], dark);
       top = mix(top, g, grey * 0.55);
       bottom = mix(bottom, g, grey * 0.55);
     }
-    const sky = c.createLinearGradient(0, 0, 0, ground);
-    sky.addColorStop(0, css(top));
-    sky.addColorStop(1, css(bottom));
-    c.fillStyle = sky;
-    c.fillRect(0, 0, W, H);
+    const sky = layers.sky.ctx;
+    sky.clearRect(-PAD, 0, W + PAD * 2, H);
+    const grad = sky.createLinearGradient(0, 0, 0, ground);
+    grad.addColorStop(0, css(top));
+    grad.addColorStop(1, css(bottom));
+    sky.fillStyle = grad;
+    sky.fillRect(-PAD, 0, W + PAD * 2, H);
 
-    // Stars
-    if (dark > 0.2) {
-      for (const s of scene.stars) {
-        c.fillStyle = `rgba(230,236,255,${dark * (0.35 + 0.45 * Math.abs(Math.sin(now / 1300 + s.p))) * (1 - grey * 0.8)})`;
-        c.fillRect(Math.round(s.x + par(4)), Math.round(s.y), s.s, s.s);
-      }
-    }
-
-    // Sun by day, moon by night, moving across the sky
     const { hour, sunrise, sunset } = clock;
     if (e > -0.08) {
       const p = (hour - sunrise) / (sunset - sunrise);
       const sx = W * (0.08 + 0.84 * p), sy = ground - Math.max(-6, e) * H * 0.75 - 4;
-      c.fillStyle = css(mix([255, 120, 70], [255, 236, 190], Math.min(1, Math.max(0, e * 3))), 0.95 * (1 - grey * 0.6));
-      c.beginPath(); c.arc(sx, sy, 6, 0, Math.PI * 2); c.fill();
-      c.fillStyle = 'rgba(255,200,120,0.12)';
-      c.beginPath(); c.arc(sx, sy, 12, 0, Math.PI * 2); c.fill();
+      sky.fillStyle = css(mix([255, 120, 70], [255, 236, 190], Math.min(1, Math.max(0, e * 3))), 0.95 * (1 - grey * 0.6));
+      sky.beginPath(); sky.arc(sx, sy, 6, 0, Math.PI * 2); sky.fill();
+      sky.fillStyle = 'rgba(255,200,120,0.12)';
+      sky.beginPath(); sky.arc(sx, sy, 12, 0, Math.PI * 2); sky.fill();
     }
+    let moon = null;
     if (dark > 0.3) {
       const nightLen = 24 - (sunset - sunrise);
       const p = ((hour - sunset + 24) % 24) / nightLen;
-      const mx = W * (0.1 + 0.8 * p), my = H * 0.12 + Math.abs(p - 0.5) * H * 0.35;
+      moon = { x: W * (0.1 + 0.8 * p), y: H * 0.12 + Math.abs(p - 0.5) * H * 0.35 };
+    }
+
+    // Far skyline (hazy)
+    const far = layers.far.ctx;
+    far.clearRect(-PAD, 0, W + PAD * 2, H);
+    far.fillStyle = css(mix(mix(bottom, [30, 26, 46], 0.55), [14, 12, 26], dark * 0.6));
+    for (const b of scene.far) far.fillRect(b.x, ground - b.h, b.w, b.h);
+
+    // Eiffel Tower: dark silhouette by day, gold at night
+    const lit = Math.min(1, Math.max(0, (0.1 - e) / 0.25));
+    const tw = layers.tower.ctx;
+    tw.clearRect(-PAD, 0, W + PAD * 2, H);
+    towerShape(tw, towerX, ground, towerH, towerHalf, css(mix([58, 46, 66], [222, 160, 64], lit)), css(mix([40, 32, 48], [150, 96, 34], lit)));
+
+    // Haussmann buildings with mansard roofs and windows
+    const wall = mix([96, 92, 110], [22, 20, 36], dark);
+    const roofCol = css(mix([70, 80, 100], [16, 18, 30], dark));
+    const pane = css(mix([60, 70, 92], [10, 12, 22], dark));
+    const near = layers.near.ctx;
+    near.clearRect(-PAD, 0, W + PAD * 2, H);
+    for (const b of scene.near) {
+      const top = ground - b.h;
+      near.fillStyle = roofCol;
+      near.fillRect(b.x + 1, top - b.roof, b.w - 2, b.roof);
+      for (const ch of b.chimneys) near.fillRect(b.x + ch, top - b.roof - 2, 1, 2);
+      near.fillStyle = css(wall);
+      near.fillRect(b.x, top, b.w, b.h);
+      for (const w of b.windows) {
+        // Lights come on after dark and occasionally switch
+        if (dark > 0.4 && Math.random() < 0.04) w.on = !w.on;
+        near.fillStyle = w.on && dark > 0.4 ? (w.warm ? 'rgba(255,196,110,0.95)' : 'rgba(190,215,255,0.85)') : pane;
+        near.fillRect(b.x + w.x, top + w.y, 1, 2);
+      }
+    }
+
+    const cloudCol = mix(mix([248, 250, 255], [255, 170, 150], Math.max(0, 1 - Math.abs(e) * 8) * 0.8), [40, 44, 62], dark);
+    look = {
+      e, dark, top, moon,
+      sparkle: dark > 0.6 && clock.minute < 5,
+      night: e < 0.02,
+      starAlpha: dark * (1 - grey * 0.8),
+      cloud: css(cloudCol, 0.55 + grey * 0.3),
+      water: css(mix(mix(bottom, [20, 30, 60], 0.6), [6, 8, 18], dark)),
+      bank: css(mix(wall, [255, 255, 255], 0.1)),
+    };
+  }
+
+  /* ─── Each frame: layers + the moving parts ── */
+  function draw(now) {
+    if (!scene || !look) return;
+    mouse.x += (mouse.tx - mouse.x) * 0.04;
+    const par = k => Math.round((mouse.x - 0.5) * k) - PAD;
+    const { ground, towerX, towerH, towerHalf } = scene;
+    const { dark, night, sparkle } = look;
+
+    c.drawImage(layers.sky.el, -PAD, 0);
+
+    // Stars twinkle in four groups, so there are only four colours to set per frame
+    if (look.starAlpha > 0.15) {
+      for (let g = 0; g < 4; g++) {
+        c.fillStyle = `rgba(230,236,255,${look.starAlpha * (0.35 + 0.45 * Math.abs(Math.sin(now / 1300 + g * 1.7)))})`;
+        const shift = Math.round((mouse.x - 0.5) * 4);
+        for (const s of scene.stars) if (s.group === g) c.fillRect(s.x + shift, s.y, s.s, s.s);
+      }
+    }
+    if (look.moon) {
+      const { x, y } = look.moon;
       c.fillStyle = `rgba(255,240,205,${dark})`;
-      c.beginPath(); c.arc(mx, my, 5, 0, Math.PI * 2); c.fill();
-      c.fillStyle = css(top);   // crescent
-      c.beginPath(); c.arc(mx + 2, my - 1, 4.4, 0, Math.PI * 2); c.fill();
+      c.beginPath(); c.arc(x, y, 5, 0, Math.PI * 2); c.fill();
+      c.fillStyle = css(look.top);   // crescent
+      c.beginPath(); c.arc(x + 2, y - 1, 4.4, 0, Math.PI * 2); c.fill();
     }
 
     // Clouds drift with the wind; how many depends on the weather
-    const cloudCol = mix(mix([248, 250, 255], [255, 170, 150], Math.max(0, 1 - Math.abs(e) * 8) * 0.8), [40, 44, 62], dark);
+    c.fillStyle = look.cloud;
+    const cloudShift = Math.round((mouse.x - 0.5) * 6);
     for (const cl of scene.clouds) {
       if (cl.visible > cloudiness) continue;
       cl.x -= cl.speed * 0.012;
       if (cl.x + cl.w < -10) cl.x = W + 10;
-      const x = Math.round(cl.x + par(6));
-      c.fillStyle = css(cloudCol, 0.55 + grey * 0.3);
-      c.fillRect(x, Math.round(cl.y), Math.round(cl.w), 3);
-      for (const [px, py] of cl.puffs) {
-        c.fillRect(x + Math.round(px * cl.w * 0.7), Math.round(cl.y - 2 - py * 3), Math.round(cl.w * 0.3), 3);
+      const x = Math.round(cl.x) + cloudShift;
+      c.fillRect(x, cl.y, cl.w, 3);
+      for (const [px, py] of cl.puffs) c.fillRect(x + Math.round(px * cl.w * 0.7), Math.round(cl.y - 2 - py * 3), Math.round(cl.w * 0.3), 3);
+    }
+
+    c.drawImage(layers.far.el, par(8), 0);
+
+    const tx = towerX + par(12) + PAD, top = ground - towerH;
+    if (night) {
+      // Rotating searchlight
+      const reach = Math.cos(now / 2600), len = W * 0.45;
+      const g = c.createLinearGradient(tx, top, tx + reach * len, top);
+      g.addColorStop(0, 'rgba(255,236,170,0.32)');
+      g.addColorStop(1, 'rgba(255,236,170,0)');
+      c.fillStyle = g;
+      c.beginPath();
+      c.moveTo(tx, top - 3);
+      c.lineTo(tx + reach * len, top - 3 - len * 0.05);
+      c.lineTo(tx + reach * len, top - 3 + len * 0.05);
+      c.closePath();
+      c.fill();
+    }
+    c.drawImage(layers.tower.el, par(12), 0);
+    if (night) {
+      c.fillStyle = Math.floor(now / 700) % 2 ? '#ff334d' : '#7a1020';
+      c.fillRect(tx, top - 7, 1, 1);
+      // Hourly sparkle
+      if (sparkle) {
+        for (let i = 0; i < towerH * 0.9; i++) {
+          const row = Math.floor(Math.random() * towerH);
+          const hw = towerHalf * Math.pow(1 - row / towerH, 2.3);
+          c.fillStyle = Math.random() < 0.7 ? '#ffffff' : '#bfe3ff';
+          c.fillRect(tx + Math.round((Math.random() * 2 - 1) * hw), ground - row, 1, 1);
+        }
       }
     }
 
-    // Far skyline (hazy)
-    const farCol = mix(mix(bottom, [30, 26, 46], 0.55), [14, 12, 26], dark * 0.6);
-    c.fillStyle = css(farCol);
-    for (const b of scene.far) c.fillRect(b.x + par(8), ground - b.h, b.w, b.h);
-
-    drawTower(towerX + par(12), ground, towerH, towerHalf, e, now, sparkle);
-
-    // Haussmann buildings with mansard roofs and windows
-    const wall = mix([96, 92, 110], [22, 20, 36], dark);
-    const roof = mix([70, 80, 100], [16, 18, 30], dark);
-    const pane = mix([60, 70, 92], [10, 12, 22], dark);
-    for (const b of scene.near) {
-      const x = b.x + par(16), top = ground - b.h;
-      c.fillStyle = css(roof);
-      c.fillRect(x + 1, top - b.roof, b.w - 2, b.roof);
-      for (const ch of b.chimneys) c.fillRect(x + ch, top - b.roof - 2, 1, 2);
-      c.fillStyle = css(wall);
-      c.fillRect(x, top, b.w, b.h);
-      for (const w of b.windows) {
-        // Lights come on after dark and occasionally switch
-        if (dark > 0.4 && Math.random() < 0.0004) w.on = !w.on;
-        const lit = w.on && dark > 0.4;
-        c.fillStyle = lit ? (w.warm ? 'rgba(255,196,110,0.95)' : 'rgba(190,215,255,0.85)') : css(pane);
-        c.fillRect(x + w.x, top + w.y, 1, 2);
-      }
-    }
+    c.drawImage(layers.near.el, par(16), 0);
 
     // The Seine, with reflections of the lit city at night
-    const water = mix(mix(bottom, [20, 30, 60], 0.6), [6, 8, 18], dark);
-    c.fillStyle = css(water);
+    c.fillStyle = look.water;
     c.fillRect(0, ground + 1, W, H - ground);
-    c.fillStyle = css(mix(wall, [255, 255, 255], 0.1));
+    c.fillStyle = look.bank;
     c.fillRect(0, ground, W, 1);
+    c.fillStyle = dark > 0.4 ? 'rgba(255,196,110,0.45)' : 'rgba(255,255,255,0.25)';
+    const depth = H - ground - 3;
     for (let x = 0; x < W; x += 2) {
-      const n = Math.sin(x * 0.7 + now / 600) + Math.sin(x * 0.23 - now / 900);
-      if (n > 1.1) {
-        c.fillStyle = dark > 0.4 ? 'rgba(255,196,110,0.45)' : 'rgba(255,255,255,0.25)';
-        c.fillRect(x, ground + 2 + ((x * 7) % (H - ground - 3)), 2, 1);
-      }
+      if (Math.sin(x * 0.7 + now / 600) + Math.sin(x * 0.23 - now / 900) > 1.1) c.fillRect(x, ground + 2 + ((x * 7) % depth), 2, 1);
     }
     if (dark > 0.4) {
       c.fillStyle = `rgba(222,160,64,${0.25 * dark})`;
-      for (let i = 0; i < 6; i++) c.fillRect(towerX + par(12) - 2 + Math.round(Math.sin(now / 400 + i) * 2), ground + 2 + i, 4, 1);
+      for (let i = 0; i < 6; i++) c.fillRect(tx - 2 + Math.round(Math.sin(now / 400 + i) * 2), ground + 2 + i, 4, 1);
     }
 
     if (sparkle && !scene.announced && typeof LIFE !== 'undefined' && LIFE.pet.el) {
@@ -303,23 +348,26 @@ const SKYLINE = (() => {
     canvas = el;
     c = canvas.getContext('2d');
     if (!c) return false;
-    resize();
+    resize();   // draws the first frame
     window.addEventListener('resize', resize);
     window.addEventListener('pointermove', ev => { mouse.tx = ev.clientX / window.innerWidth; }, { passive: true });
 
     if (FX.reduceMotion) {
-      draw(performance.now());
-      setInterval(() => draw(performance.now()), 60_000);
-    } else {
+      setInterval(() => { renderLayers(); draw(performance.now()); }, 60_000);
+      return true;
+    }
+    // Hold still during the login intro (it's hidden anyway); animate once the desktop shows
+    document.addEventListener('pnt:ready', () => {
       let last = 0;
       (function loop(now) {
-        if (now - last > 33) {   // ~30 fps is plenty for pixel art
+        if (now - last > 40) {   // ~25 fps is plenty for pixel art
           last = now;
+          if (now - lastRender > 5000) renderLayers();
           draw(now);
         }
         requestAnimationFrame(loop);
       })(0);
-    }
+    }, { once: true });
     return true;
   }
 
@@ -327,6 +375,7 @@ const SKYLINE = (() => {
   function setWeather(kind) {
     cloudiness = { clear: 0.3, cloudy: 0.85, fog: 1, rain: 1, snow: 1, storm: 1 }[kind] ?? 0.35;
     grey = { clear: 0, cloudy: 0.35, fog: 0.7, rain: 0.6, snow: 0.45, storm: 0.85 }[kind] ?? 0;
+    renderLayers();
   }
 
   return { start, setWeather };
