@@ -3,6 +3,7 @@
 ════════════════════════════════════════ */
 
 const CV_URL = 'uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf?v=2';
+const CV_FR_URL = 'uploads/Paul%20Nehme%20Tekle%20-%20CV%20(FR).pdf';
 const GITHUB_URL = 'https://github.com/nehmetekle';
 
 // Photo: put one in uploads/ and set its path here, e.g. 'uploads/photo.jpg'
@@ -286,7 +287,7 @@ const HELP = [
   ['skills',      'skills',        'run skills.sh'],
   ['education',   'education',     'open education/'],
   ['contact',     'contact',       'open contact.app'],
-  ['cv',          'cv',            'download my CV'],
+  ['cv',          'cv',            'download my CV (`cv fr` for French)'],
   ['github',      'github',        'open my GitHub'],
   ['ls',          'ls',            'list desktop files'],
   ['open <file>', 'open projects', 'open any desktop file'],
@@ -333,7 +334,12 @@ const COMMANDS = {
 
   date: () => new Date().toLocaleString('en-GB', { timeZone: 'Europe/Paris' }) + ' (Paris)',
 
-  cv: () => { window.open(CV_URL, '_blank', 'noopener'); return `opening <a href="${CV_URL}" target="_blank" rel="noopener">CV.pdf</a>…`; },
+  cv: args => {
+    const fr = (args[0] || '').toLowerCase() === 'fr';
+    const url = fr ? CV_FR_URL : CV_URL;
+    window.open(url, '_blank', 'noopener');
+    return `opening <a href="${url}" target="_blank" rel="noopener">CV${fr ? ' (FR)' : '.pdf'}</a>… <span class="muted">${fr ? '' : '(type `cv fr` for the French version)'}</span>`;
+  },
 
   sudo: () => '<span class="err">paul is not in the sudoers file.</span> But he\'ll be open to full-time roles after his alternance → try `contact`',
 
