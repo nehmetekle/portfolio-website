@@ -448,20 +448,14 @@ window.addEventListener('hashchange', openFromHash);
 /* ─── Power on → boot log → login → desktop ── */
 function openStartupWindows() {
   document.dispatchEvent(new CustomEvent('pnt:ready'));
+  // Only the terminal opens, centred on the desktop (phones show it full screen)
+  openApp('terminal');
+  const term = windows.get('terminal').el;
   if (!isSmall()) {
-    openApp('terminal');
-    const term = windows.get('terminal').el;
-    // Sit just left of the desktop widgets when they're showing
-    const widgets = document.getElementById('widgets');
-    const rightEdge = widgets.offsetParent ? widgets.offsetLeft - 24 : desktop.clientWidth - 40;
-    term.style.left = `${Math.max(8, rightEdge - term.offsetWidth)}px`;
-    term.style.top  = `${Math.max(8, desktop.clientHeight - term.offsetHeight - 40)}px`;
+    term.style.left = `${Math.max(8, (desktop.clientWidth - term.offsetWidth) / 2)}px`;
+    term.style.top  = `${Math.max(8, (desktop.clientHeight - term.offsetHeight) / 2)}px`;
   }
-  // Small delays so the windows pop in one after the other
-  setTimeout(() => {
-    openApp('readme');
-    setTimeout(openFromHash, 260);
-  }, isSmall() ? 0 : 260);
+  setTimeout(openFromHash, 260);
 }
 
 /* ─── Live wallpaper + sound toggle ─────── */
