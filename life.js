@@ -78,7 +78,7 @@ const LIFE = (() => {
     [7,  '☕ Paul is making coffee'],
     [9,  '💻 Paul is shipping features'],
     [12, '🍝 Paul is at lunch'],
-    [14, '🤖 Paul is building AI agents'],
+    [14, '🧩 Paul is coding in Angular & CodeIgniter'],
     [18, '📚 Paul is studying for his Master\'s'],
     [20, '🌙 Paul is hacking on side projects'],
   ];
@@ -117,7 +117,7 @@ const LIFE = (() => {
     'Paul built me between two deploys.',
     'psst… type <code>matrix</code> in the terminal',
     'I run on coffee and Agentic AI ☕',
-    'Paul is open to work — tell your recruiter friends!',
+    'Paul is looking for a full-time role after his alternance — tell your recruiter friends!',
     'Beep boop. That tickles.',
     'Try <code>hack</code> in the terminal. I dare you.',
     'Have you found all the achievements? Type <code>achievements</code>',
@@ -133,7 +133,7 @@ const LIFE = (() => {
   ];
   const OPEN_LINES = {
     about:     'That\'s Paul! He\'s cool, I promise.',
-    career:    'YOOVO → where the AI magic happens ✨',
+    career:    'From leading a team at YOOVO to fintech at Aether 🚀',
     projects:  'WCN is my favourite — crypto for good drivers 🚗💰',
     skills:    'So many skills. I only know "beep".',
     education: 'Master\'s at Éstiam — Paul never stops learning 🎓',
@@ -416,7 +416,7 @@ const LIFE = (() => {
     setTimeout(() => toast('👋', 'Paul', 'Thanks for stopping by! Everything here is clickable — even the robot.'), 2600);
     setTimeout(() => {
       if (!opened.has('contact')) {
-        toast('💼', 'Paul is open to work', 'Click here to see how to reach him →', { onClick: () => openApp('contact'), ms: 8000 });
+        toast('💼', 'Hiring?', 'Paul is in alternance at Aether and open to full-time roles after it. Click to get in touch →', { onClick: () => openApp('contact'), ms: 8000 });
       }
     }, 40_000);
   }

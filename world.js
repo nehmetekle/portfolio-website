@@ -380,7 +380,7 @@ const COMMANDS = {
     '<span class="muted">tips: ↑/↓ for history · Tab to autocomplete · Esc closes a window</span>',
   ].join('\n'),
 
-  whoami: () => 'Paul Nehme Tekle — Software Engineer\nParis, France · currently at YOOVO + Master\'s at Éstiam\n<span class="muted">type `about` for the long version</span>',
+  whoami: () => 'Paul Nehme Tekle — Software Engineer\nParis, France · alternance at Aether Financial Services + Master\'s at Éstiam\n<span class="muted">type `about` for the long version</span>',
 
   ls: () => Object.values(APPS).map(a => a.title).join('    '),
 
@@ -399,7 +399,7 @@ const COMMANDS = {
 
   cv: () => { window.open(CV_URL, '_blank', 'noopener'); return `opening <a href="${CV_URL}" target="_blank" rel="noopener">CV.pdf</a>…`; },
 
-  sudo: () => '<span class="err">paul is not in the sudoers file.</span> But he is open to new roles → try `contact`',
+  sudo: () => '<span class="err">paul is not in the sudoers file.</span> But he\'ll be open to full-time roles after his alternance → try `contact`',
 
   exit: () => { setTimeout(logout, 400); return 'logging out…'; },
 

@@ -679,3 +679,7 @@ body.world {
 .login-avatar { position: relative; overflow: hidden; }
 .login-avatar img { display: none; }
 .has-photo .login-avatar img { display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* Current job stands out in career/ */
+.mission-current { border-left-color: var(--green); }
+.mission-current .mission-head span { color: var(--green); }
