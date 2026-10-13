@@ -2,7 +2,7 @@
    PNT.OS — window manager + terminal
 ════════════════════════════════════════ */
 
-const CV_URL = 'uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf';
+const CV_URL = 'uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf?v=2';
 const GITHUB_URL = 'https://github.com/nehmetekle';
 
 // Photo: put one in uploads/ and set its path here, e.g. 'uploads/photo.jpg'
@@ -178,7 +178,8 @@ function focusWin(id) {
   const w = windows.get(id);
   if (!w) return;
   w.el.style.zIndex = ++zTop;
-  w.el.querySelector('.term-input')?.focus({ preventScroll: true });
+  // On touch screens focusing the input would pop up the keyboard over everything
+  if (!isTouch) w.el.querySelector('.term-input')?.focus({ preventScroll: true });
 }
 
 function restore(id) {

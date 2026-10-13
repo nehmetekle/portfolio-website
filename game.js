@@ -251,7 +251,7 @@ const GAME = (() => {
     function banner(title, sub) {
       c.fillStyle = 'rgba(5,7,13,0.55)';
       c.fillRect(0, H / 2 - 52, W, 92);
-      c.font = '800 30px "Syne", sans-serif';
+      c.font = `800 ${Math.min(30, Math.floor(W / 13))}px "Syne", sans-serif`;
       c.fillStyle = '#fff';
       c.fillText(title, W / 2, H / 2 - 8);
       c.font = '400 13px "DM Mono", monospace';

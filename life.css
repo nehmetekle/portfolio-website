@@ -84,7 +84,7 @@
   .widgets { display: none; }
 }
 @media (max-width: 720px) {
-  .widgets { top: 330px; left: 0; right: 0; margin: 0 auto; width: min(300px, calc(100% - 32px)); }
+  .widgets { position: relative; top: auto; right: auto; margin: 20px auto 80px; width: min(300px, calc(100% - 32px)); flex-shrink: 0; }
   .sticky { align-self: center; }
 }
 
@@ -316,4 +316,15 @@ button.toast:hover { border-color: var(--red); }
   width: 100%;
   height: 100%;
   pointer-events: none;
+}
+
+@media (max-width: 720px) {
+  /* Windows fill the screen on phones: keep Byte, Null and bugs behind them */
+  .pet, .bug, .drone { z-index: 5 !important; }
+  .toasts { bottom: 56px; right: 10px; width: calc(100vw - 20px); }
+  .toast { padding: 10px 12px; gap: 10px; }
+  .toast-icon { font-size: 1.1rem; }
+  .toast-text b { font-size: 0.8rem; }
+  .toast-text span { font-size: 0.74rem; }
+  .toast:nth-last-child(n+3) { display: none; }
 }

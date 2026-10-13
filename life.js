@@ -411,7 +411,10 @@ const LIFE = (() => {
       if (idle > SAVER_AFTER) startSaver();
     }, 1000);
 
-    setTimeout(() => toast('👋', 'Paul', 'Thanks for stopping by! Everything here is clickable — even the robot.'), 2600);
+    setTimeout(() => {
+      if (isSmall()) toast('💻', 'Psst — try it on a laptop', 'Everything works on your phone, but PNT.OS is a way better experience on a bigger screen.');
+      else toast('👋', 'Paul', 'Thanks for stopping by! Everything here is clickable — even the robot.');
+    }, 2600);
     setTimeout(() => {
       if (!opened.has('contact')) {
         toast('💼', 'Hiring?', 'Paul joins Aether in alternance from October 2026 and is open to full-time roles after it. Click to get in touch →', { onClick: () => openApp('contact'), ms: 8000 });
