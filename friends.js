@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════
-   PNT.OS friends — Null the cat, bugs for Byte to chase,
+   PNT.OS friends — Null the drone, bugs for Byte to chase,
    and live Paris weather on the desktop
 ════════════════════════════════════════ */
 const FRIENDS = (() => {
@@ -22,53 +22,53 @@ const FRIENDS = (() => {
     };
   }
 
-  /* ─── Null the cat ─────────────────────── */
-  const CAT_SVG = `
-    <svg class="cat-sprite" viewBox="0 0 16 13" width="48" height="39" shape-rendering="crispEdges" aria-hidden="true">
-      <g class="c-tail"><rect x="11" y="9" width="3" height="2" fill="#f59e5b"/><rect x="13" y="5" width="2" height="5" fill="#f59e5b"/><rect x="13" y="5" width="2" height="1" fill="#d9783a"/></g>
-      <rect x="4" y="5" width="6" height="1" fill="#f59e5b"/>
-      <rect x="3" y="6" width="9" height="6" fill="#f59e5b"/>
-      <rect x="6" y="7" width="1" height="3" fill="#d9783a"/>
-      <rect x="8" y="7" width="1" height="3" fill="#d9783a"/>
-      <rect x="10" y="7" width="1" height="3" fill="#d9783a"/>
-      <rect x="3" y="9" width="3" height="3" fill="#ffd9b0"/>
-      <rect x="1" y="0" width="1" height="1" fill="#f59e5b"/>
-      <rect x="6" y="0" width="1" height="1" fill="#f59e5b"/>
-      <rect x="1" y="1" width="6" height="5" fill="#f59e5b"/>
-      <rect x="2" y="1" width="1" height="1" fill="#ff9fb2"/>
-      <rect x="5" y="1" width="1" height="1" fill="#ff9fb2"/>
-      <g class="c-eyes"><rect x="2" y="3" width="1" height="1" fill="#14321f"/><rect x="5" y="3" width="1" height="1" fill="#14321f"/></g>
-      <rect x="3" y="4" width="2" height="1" fill="#ff9fb2"/>
-      <rect x="3" y="12" width="2" height="1" fill="#ffd9b0"/>
-      <rect x="6" y="12" width="2" height="1" fill="#ffd9b0"/>
+  /* ─── Null the drone ───────────────────── */
+  const DRONE_SVG = `
+    <svg class="drone-sprite" viewBox="0 0 16 14" width="48" height="42" shape-rendering="crispEdges" aria-hidden="true">
+      <rect class="d-prop" x="2" y="0" width="12" height="1" fill="#aab3c8"/>
+      <rect x="7" y="1" width="2" height="1" fill="#6b7799"/>
+      <rect x="4" y="2" width="8" height="1" fill="#8b95b5"/>
+      <rect x="3" y="3" width="10" height="6" fill="#8b95b5"/>
+      <rect x="4" y="9" width="8" height="1" fill="#8b95b5"/>
+      <rect x="3" y="3" width="10" height="1" fill="#aab3c8"/>
+      <rect x="4" y="4" width="8" height="3" fill="#0c1020"/>
+      <rect class="d-eye" x="7" y="5" width="2" height="1" fill="#38bdf8"/>
+      <rect class="d-light" x="2" y="5" width="1" height="2" fill="#ff8c42"/>
+      <rect class="d-light" x="13" y="5" width="1" height="2" fill="#ff8c42"/>
+      <rect x="5" y="8" width="6" height="1" fill="#ff8c42"/>
+      <rect x="4" y="10" width="1" height="2" fill="#6b7799"/>
+      <rect x="11" y="10" width="1" height="2" fill="#6b7799"/>
+      <rect x="3" y="12" width="3" height="1" fill="#6b7799"/>
+      <rect x="10" y="12" width="3" height="1" fill="#6b7799"/>
+      <rect class="d-thrust" x="6" y="10" width="4" height="1" fill="#38bdf8" opacity="0.5"/>
     </svg>`;
-  const CAT_W = 48, CAT_H = 39;
-  const CAT_LINES = [
-    'mrrp. 🐈',
+  const DRONE_H = 42;
+  const DRONE_LINES = [
+    'bzzzt. 🛸',
     'I\'m Null. Not undefined.',
-    '*purrs in binary* 01110000',
-    'I sit on warm windows 🔥',
-    'meow (that means "hire Paul")',
+    'Scanning… visitor looks hireable-adjacent 👀',
+    'I patrol the windows so Byte doesn\'t have to.',
+    'beep boop (that means "hire Paul")',
     'Byte thinks he\'s the mascot. Cute.',
   ];
 
-  const cat = {
+  const drone = {
     el: null, say: null, x: 0, y: 0, perch: null, hop: null, alarmed: false, pets: 0,
 
     spawn() {
       const el = document.createElement('button');
       el.type = 'button';
-      el.className = 'cat';
-      el.setAttribute('aria-label', 'Null, the desktop cat — click to pet');
-      el.innerHTML = `${CAT_SVG}<span class="cat-hearts" aria-hidden="true"></span>`;
+      el.className = 'drone';
+      el.setAttribute('aria-label', 'Null, the desktop drone — click to say hi');
+      el.innerHTML = `${DRONE_SVG}<span class="drone-hearts" aria-hidden="true"></span>`;
       desktop.appendChild(el);
       this.el = el;
       this.say = bubbleFor(el);
       const ground = this.groundPos();
       this.x = ground.x;
-      this.y = -60;    // drops in from above
+      this.y = -60;    // flies in from above
       el.addEventListener('click', () => this.pet());
-      this.hopTo(this.pickPerch());
+      this.flyTo(this.pickPerch());
       setInterval(() => this.check(), 2500);
       requestAnimationFrame(() => this.loop());
     },
@@ -76,34 +76,35 @@ const FRIENDS = (() => {
     // Frontmost window with room above its title bar
     pickPerch() {
       const wins = [...desktop.querySelectorAll('.win:not(.minimized):not(.maximized)')]
-        .filter(w => w.offsetTop > 44 && w.offsetWidth > 260);
+        .filter(w => w.offsetTop > 50 && w.offsetWidth > 260);
       wins.sort((a, b) => (+b.style.zIndex || 0) - (+a.style.zIndex || 0));
       return wins[0] || null;
     },
 
     groundPos() {
-      return { x: desktop.clientWidth * 0.62, y: desktop.clientHeight - CAT_H - 2 };
+      return { x: desktop.clientWidth * 0.62, y: desktop.clientHeight - DRONE_H - 30 };
     },
 
+    // Hovers just above the window's title bar
     perchPos(win) {
       if (!win) return this.groundPos();
-      return { x: win.offsetLeft + win.offsetWidth - 120, y: win.offsetTop - CAT_H + 4 };
+      return { x: win.offsetLeft + win.offsetWidth - 120, y: win.offsetTop - DRONE_H - 6 };
     },
 
-    hopTo(win) {
+    flyTo(win) {
       this.perch = win;
       this.alarmed = false;
-      desktop.appendChild(this.el);   // paint above the window it lands on
-      this.hop = { fromX: this.x, fromY: this.y, start: performance.now(), dur: FX.reduceMotion ? 1 : 650 };
-      this.el.classList.add('hopping');
+      desktop.appendChild(this.el);   // paint above the window it guards
+      this.hop = { fromX: this.x, fromY: this.y, start: performance.now(), dur: FX.reduceMotion ? 1 : 800 };
+      this.el.classList.add('flying');
     },
 
     check() {
       const perchGone = this.perch && (!this.perch.isConnected || this.perch.classList.contains('minimized') || this.perch.classList.contains('maximized'));
       const best = this.pickPerch();
       if (perchGone || (best !== this.perch && !this.hop)) {
-        if (perchGone && Math.random() < 0.5) this.say('hey! I was sleeping on that 😾', 2200);
-        this.hopTo(best);
+        if (perchGone && Math.random() < 0.5) this.say('hey! I was guarding that window 😤', 2200);
+        this.flyTo(best);
       }
     },
 
@@ -112,22 +113,22 @@ const FRIENDS = (() => {
       if (this.hop) {
         const p = Math.min(1, (performance.now() - this.hop.start) / this.hop.dur);
         const e = p * p * (3 - 2 * p);
-        const arc = Math.sin(p * Math.PI) * 70;
+        const arc = Math.sin(p * Math.PI) * 50;
         this.x = this.hop.fromX + (target.x - this.hop.fromX) * e;
         this.y = this.hop.fromY + (target.y - this.hop.fromY) * e - arc;
-        if (p === 1) { this.hop = null; this.el.classList.remove('hopping'); }
+        if (p === 1) { this.hop = null; this.el.classList.remove('flying'); }
       } else {
-        this.x = target.x;
-        this.y = target.y;
+        // Trail slightly behind the window when it's dragged, like it's flying to keep up
+        this.x += (target.x - this.x) * 0.25;
+        this.y += (target.y - this.y) * 0.25;
       }
       this.el.style.transform = `translate(${this.x}px, ${this.y}px)`;
       this.el.style.zIndex = this.perch ? this.perch.style.zIndex : 2;
 
-      // Riding along while someone drags her window around
       if (this.perch?.classList.contains('dragging') && !this.alarmed) {
         this.alarmed = true;
-        FX.sfx.meow();
-        this.say('mrrow?! 🙀', 1800);
+        FX.sfx.boop();
+        this.say('whoa whoa, wait for me! 🛸', 1800);
       } else if (this.perch && !this.perch.classList.contains('dragging')) {
         this.alarmed = false;
       }
@@ -135,12 +136,15 @@ const FRIENDS = (() => {
     },
 
     pet() {
-      FX.sfx.purr();
-      this.say(pick(CAT_LINES));
-      const hearts = this.el.querySelector('.cat-hearts');
+      FX.sfx.whirr();
+      this.say(pick(DRONE_LINES));
+      this.el.classList.remove('spin');
+      void this.el.offsetWidth;
+      this.el.classList.add('spin');
+      const hearts = this.el.querySelector('.drone-hearts');
       hearts.innerHTML = '<i>♥</i><i>♥</i><i>♥</i>';
       setTimeout(() => (hearts.innerHTML = ''), 1400);
-      if (++this.pets === 1) LIFE.unlock('catperson');
+      if (++this.pets === 1) LIFE.unlock('drone');
     },
   };
 
@@ -366,7 +370,7 @@ const FRIENDS = (() => {
   /* ─── Start with the rest of the desktop ── */
   document.addEventListener('pnt:ready', () => {
     loadWeather();
-    setTimeout(() => cat.spawn(), 6000);
+    setTimeout(() => drone.spawn(), 6000);
     if (!FX.reduceMotion) {
       nextBugAt = Date.now() + 15_000;
       setInterval(bugLoop, 1000);

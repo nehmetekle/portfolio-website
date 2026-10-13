@@ -76,8 +76,8 @@ const FX = (() => {
     notify()  { tone(880, { dur: 0.12, vol: 0.05 }); tone(1320, { dur: 0.25, vol: 0.045, delay: 0.09 }); },
     bonk()    { tone(220, { type: 'triangle', dur: 0.12, vol: 0.08, slide: 110 }); },
     squash()  { noise(0.12, 0.08, 0, 800); tone(140, { dur: 0.15, vol: 0.08, slide: 60 }); },
-    purr()    { tone(28, { type: 'sawtooth', dur: 0.9, vol: 0.06, slide: 24 }); tone(32, { type: 'sawtooth', dur: 0.9, vol: 0.04, delay: 0.45, slide: 26 }); },
-    meow()    { tone(700, { type: 'triangle', dur: 0.35, vol: 0.05, slide: 480 }); },
+    whirr()   { tone(180, { type: 'sawtooth', dur: 0.6, vol: 0.03, slide: 520 }); noise(0.5, 0.02, 0, 3000); },
+    boop()    { tone(880, { type: 'square', dur: 0.07, vol: 0.025 }); tone(660, { type: 'square', dur: 0.09, vol: 0.025, delay: 0.09 }); },
     thunder() { noise(1.6, 0.14, 0, 20); tone(45, { dur: 1.4, vol: 0.2, slide: 30 }); },
     chirp()   { tone(900, { type: 'square', dur: 0.06, vol: 0.025, slide: 1500 }); tone(1300, { type: 'square', dur: 0.08, vol: 0.02, slide: 1800, delay: 0.08 }); },
   };

@@ -46,10 +46,10 @@ const LIFE = (() => {
     friend:    ['🤖', 'Best friends',  'Byte likes you now'],
     rollercoaster: ['🎢', 'Rollercoaster', 'threw Byte across the desktop'],
     debugger:  ['🐛', 'Debugger',      'squashed 3 bugs yourself'],
-    catperson: ['🐈', 'Cat person',    'pet Null the cat'],
+    drone:     ['🛸', 'Drone pilot',   'said hi to Null the drone'],
   };
   const TOTAL = Object.keys(ACHIEVEMENTS).length;
-  const unlocked = new Set(JSON.parse(localStorage.getItem('pnt-achievements') || '[]'));
+  const unlocked = new Set(JSON.parse(localStorage.getItem('pnt-achievements') || '[]').filter(k => k in ACHIEVEMENTS));
 
   function unlock(key) {
     if (unlocked.has(key)) return;
@@ -120,7 +120,7 @@ const LIFE = (() => {
     'Try <code>hack</code> in the terminal. I dare you.',
     'Have you found all the achievements? Type <code>achievements</code>',
     'You can pick me up, you know. Just drag me!',
-    'Have you met Null? She naps on top of your windows 🐈',
+    'Have you met Null? She\'s a drone who guards your windows 🛸',
   ];
   const IDLE_LINES = [
     'la la la… 🎵',

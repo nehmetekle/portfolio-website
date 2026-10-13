@@ -270,34 +270,39 @@ button.toast:hover { border-color: var(--red); }
 .running .p-leg-l, .running .p-leg-r, .running .p-arm-l, .running .p-arm-r { animation-duration: 0.2s; }
 .p-eyes { transition: translate 0.15s ease; }
 
-/* ── Null the cat ─────────────────────── */
-.cat {
+/* ── Null the drone ───────────────────── */
+.drone {
   position: absolute;
   top: 0;
   left: 0;
   width: 48px;
-  height: 39px;
+  height: 42px;
   cursor: pointer;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.45));
+  filter: drop-shadow(0 10px 8px rgba(0,0,0,0.4));
 }
-.cat-sprite { display: block; overflow: visible; }
-.cat-sprite rect, .cat-sprite g { transform-box: fill-box; }
-.c-tail { transform-origin: 0% 100%; animation: swish 2.6s ease-in-out infinite; }
-@keyframes swish { 0%, 100% { rotate: 0deg; } 50% { rotate: 12deg; } }
-.c-eyes { transform-origin: center; animation: cat-blink 5s infinite; }
-@keyframes cat-blink { 0%, 90%, 100% { transform: scaleY(1); } 93% { transform: scaleY(0.1); } }
-.cat.hopping .cat-sprite { rotate: -8deg; }
-.cat .pet-bubble { bottom: 46px; }
-.cat-hearts { position: absolute; left: 14px; top: -6px; pointer-events: none; }
-.cat-hearts i {
+.drone-sprite { display: block; overflow: visible; animation: hover 1.8s ease-in-out infinite; }
+.drone-sprite rect { transform-box: fill-box; transform-origin: center; }
+@keyframes hover { 50% { translate: 0 -4px; } }
+.d-prop { animation: prop 0.12s steps(2) infinite; }
+@keyframes prop { 50% { transform: scaleX(0.25); } }
+.d-eye { animation: scan 3.2s ease-in-out infinite; }
+@keyframes scan { 0%, 100% { translate: -2px 0; } 50% { translate: 2px 0; } }
+.d-light { animation: led 1.2s steps(1) infinite; }
+.d-thrust { animation: live 0.6s ease-in-out infinite; }
+.drone.flying .drone-sprite { rotate: 8deg; }
+.drone.spin .drone-sprite { animation: drone-spin 0.6s ease-in-out, hover 1.8s ease-in-out infinite; }
+@keyframes drone-spin { from { rotate: 0deg; } to { rotate: 360deg; } }
+.drone .pet-bubble { bottom: 50px; }
+.drone-hearts { position: absolute; left: 14px; top: -6px; pointer-events: none; }
+.drone-hearts i {
   position: absolute;
   font-style: normal;
-  color: #ff5c8a;
+  color: #38bdf8;
   font-size: 0.9rem;
   animation: heart 1.3s ease-out forwards;
 }
-.cat-hearts i:nth-child(2) { left: 12px; animation-delay: 0.15s; }
-.cat-hearts i:nth-child(3) { left: -8px; animation-delay: 0.3s; }
+.drone-hearts i:nth-child(2) { left: 12px; animation-delay: 0.15s; }
+.drone-hearts i:nth-child(3) { left: -8px; animation-delay: 0.3s; }
 @keyframes heart { from { opacity: 1; transform: translateY(0) scale(0.6); } to { opacity: 0; transform: translateY(-34px) scale(1.2); } }
 
 /* ── Bugs ─────────────────────────────── */

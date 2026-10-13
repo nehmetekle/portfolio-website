@@ -292,7 +292,7 @@ const COMMANDS = {
     '<span class="muted">tips: ↑/↓ for history · Tab to autocomplete · Esc closes a window</span>',
   ].join('\n'),
 
-  whoami: () => 'Paul Nehme Tekle — Full Stack Developer · Agentic AI\nParis, France · currently at YOOVO + Master\'s at Éstiam\n<span class="muted">type `about` for the long version</span>',
+  whoami: () => 'Paul Nehme Tekle — Software Engineer\nParis, France · currently at YOOVO + Master\'s at Éstiam\n<span class="muted">type `about` for the long version</span>',
 
   ls: () => Object.values(APPS).map(a => a.title).join('    '),
 
