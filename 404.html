@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — file not found · PNT.OS</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #080b14; color: #dde3ef; font-family: ui-monospace, 'DM Mono', monospace; }
+    main { padding: 24px; max-width: 520px; }
+    h1 { margin: 0 0 8px; font-size: 3rem; color: #ff334d; }
+    p { color: #6b7799; line-height: 1.6; }
+    .prompt { color: #ff334d; }
+    a { color: #ff8c42; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>404</h1>
+    <p><span class="prompt">paul@pnt:~$</span> cd <span id="path"></span><br>bash: no such file or directory</p>
+    <p><a href="/">← back to PNT.OS</a></p>
+  </main>
+  <script>document.getElementById('path').textContent = location.pathname;</script>
+</body>
+</html>

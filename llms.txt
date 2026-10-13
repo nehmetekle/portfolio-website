@@ -1,0 +1,35 @@
+# Paul Nehme Tekle
+
+> Software Engineer based in Paris, France. Full stack developer in alternance at Aether Financial Services from October 2026 (Angular, PHP CodeIgniter); previously Full Stack Team Lead at YOOVO in Beirut (2024–2026). Studying for a Master's in Web & Mobile Development at Éstiam. Looking for a full-time software engineering role in Paris once the alternance ends.
+
+The website paulnehmetekle.com is an interactive portfolio styled as a retro desktop operating system ("PNT.OS"). This file is a plain-text summary of the same information.
+
+## Experience
+
+- **Full Stack Developer (Alternance), Aether Financial Services — Paris, from October 2026.** Aether Financial Services (https://aetherfs.com/) is an independent Paris-based financial services firm (private debt agency, valuation of financial instruments, corporate & issuer services). Full stack development with Angular and PHP CodeIgniter.
+- **Full Stack Team Lead, YOOVO — Beirut, 2024–2026.** Led a full stack team (sprint planning, code reviews, quality assurance); drove architecture decisions; built features with Angular, React.js, C# .NET and MySQL; designed and deployed an Agentic AI system that automated development workflows and cut feature delivery time; CI/CD with Jenkins and AWS deployments.
+- **Freelance Full Stack Developer — 2023–present.** Web and mobile applications built end-to-end for clients (Angular, React Native, Laravel, Django, FastAPI, Ionic). Notable projects:
+  - **NutriClinic** (private client project): clinic management system for a nutrition clinic — clients, appointments, consultations, payments, staff, audit log. Next.js, TypeScript, REST API, zod, Prisma, PostgreSQL.
+  - **WCN · Wheel In Crypto** (final year project, 2023–2024): cryptocurrency reward system for safe driving — Angular + .NET web, Angular Ionic + .NET mobile, Solidity smart contracts, GPS tracking with Google Maps.
+
+## Education
+
+- Master's in Web & Mobile Development — Éstiam, Paris (2025–present)
+- Bachelor's in Computer Science — Université Antonine, Beirut (2021–2024)
+
+## Skills
+
+- Languages: JavaScript, TypeScript, C#, Python, Java, C++, PHP, Solidity, HTML, CSS/SCSS
+- Frameworks: Angular, React.js, React Native, .NET, CodeIgniter, Django, FastAPI, Laravel, Ionic, Next.js
+- Cloud & DevOps: AWS, Azure, Jenkins, CI/CD, Git
+- AI: Agentic AI, Machine Learning, LLMs
+- Spoken languages: English (B2, IELTS), French (intermediate)
+
+## Contact
+
+- Email: Nehmehabib@hotmail.com
+- Phone: +33 7 76 24 84 51
+- LinkedIn: https://www.linkedin.com/in/paul-nehme-tekle-86a382207/
+- GitHub: https://github.com/nehmetekle
+- CV (English): https://paulnehmetekle.com/uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf
+- CV (français): https://paulnehmetekle.com/uploads/Paul%20Nehme%20Tekle%20-%20CV%20(FR).pdf

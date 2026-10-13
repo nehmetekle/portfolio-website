@@ -7,10 +7,11 @@
   <!-- ═══ Primary SEO ═══ -->
   <title>Paul Nehme Tekle — Software Engineer · PNT.OS</title>
   <meta name="description" content="Paul Nehme Tekle is a Software Engineer in Paris, a full stack developer in alternance at Aether Financial Services from October 2026, open to full-time roles afterwards." />
-  <meta name="keywords" content="Paul Nehme Tekle, Software Engineer, Full Stack, Angular, React, .NET, TypeScript, Python, Paris, Portfolio" />
+  <meta name="keywords" content="Paul Nehme Tekle, Software Engineer, Ingénieur logiciel, Développeur Full Stack, Full Stack Developer, Angular, PHP, CodeIgniter, .NET, TypeScript, Paris, Alternance, Portfolio" />
   <meta name="author" content="Paul Nehme Tekle" />
-  <meta name="robots" content="index, follow" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <link rel="canonical" href="https://paulnehmetekle.com/" />
+  <link rel="alternate" type="text/plain" href="https://paulnehmetekle.com/llms.txt" title="LLM-readable profile" />
 
   <!-- ═══ Open Graph (Facebook, LinkedIn, Discord…) ═══ -->
   <meta property="og:type"        content="website" />
@@ -25,6 +26,7 @@
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt"   content="Paul Nehme Tekle — Software Engineer portfolio card" />
   <meta property="og:locale"      content="en_US" />
+  <meta property="og:locale:alternate" content="fr_FR" />
 
   <!-- ═══ Twitter / X Card ═══ -->
   <meta name="twitter:card"        content="summary_large_image" />
@@ -43,26 +45,62 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Paul Nehme Tekle",
-    "url": "https://paulnehmetekle.com",
-    "image": "https://paulnehmetekle.com/og-image.png",
-    "jobTitle": "Software Engineer",
-    "worksFor": { "@type": "Organization", "name": "Aether Financial Services", "url": "https://aetherfs.com/" },
-    "description": "Software Engineer building scalable web and mobile applications.",
-    "email": "Nehmehabib@hotmail.com",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Paris",
-      "addressCountry": "FR"
-    },
-    "sameAs": ["https://www.linkedin.com/in/paul-nehme-tekle-86a382207/", "https://github.com/nehmetekle"],
-    "knowsAbout": [
-      "Full Stack Development",
-      "Agentic AI",
-      "React",
-      "Node.js",
-      "TypeScript"
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://paulnehmetekle.com/#paul",
+        "name": "Paul Nehme Tekle",
+        "url": "https://paulnehmetekle.com/",
+        "image": "https://paulnehmetekle.com/uploads/profile.jpeg",
+        "jobTitle": "Software Engineer",
+        "description": "Software Engineer in Paris. Full stack developer in alternance at Aether Financial Services from October 2026, previously Full Stack Team Lead at YOOVO (2024–2026).",
+        "email": "mailto:Nehmehabib@hotmail.com",
+        "telephone": "+33776248451",
+        "address": { "@type": "PostalAddress", "addressLocality": "Paris", "addressCountry": "FR" },
+        "worksFor": { "@type": "Organization", "name": "Aether Financial Services", "url": "https://aetherfs.com/" },
+        "hasOccupation": [
+          { "@type": "Occupation", "name": "Full Stack Developer (Alternance)", "occupationLocation": { "@type": "City", "name": "Paris" }, "skills": "Angular, PHP, CodeIgniter, TypeScript" },
+          { "@type": "Occupation", "name": "Full Stack Team Lead", "occupationLocation": { "@type": "City", "name": "Beirut" }, "skills": "Angular, React, C# .NET, MySQL, Jenkins, AWS, Agentic AI" }
+        ],
+        "alumniOf": [
+          { "@type": "CollegeOrUniversity", "name": "Éstiam", "url": "https://www.estiam.education/" },
+          { "@type": "CollegeOrUniversity", "name": "Université Antonine" }
+        ],
+        "knowsLanguage": ["English", "French"],
+        "knowsAbout": ["Software Engineering", "Full Stack Development", "Angular", "TypeScript", "PHP", "CodeIgniter", "C# .NET", "React", "Next.js", "Python", "Solidity", "Blockchain", "Agentic AI", "CI/CD", "AWS"],
+        "sameAs": ["https://www.linkedin.com/in/paul-nehme-tekle-86a382207/", "https://github.com/nehmetekle"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://paulnehmetekle.com/#website",
+        "url": "https://paulnehmetekle.com/",
+        "name": "Paul Nehme Tekle — Software Engineer",
+        "inLanguage": ["en", "fr"],
+        "author": { "@id": "https://paulnehmetekle.com/#paul" }
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": "https://paulnehmetekle.com/#profile",
+        "url": "https://paulnehmetekle.com/",
+        "name": "Paul Nehme Tekle — Software Engineer in Paris",
+        "isPartOf": { "@id": "https://paulnehmetekle.com/#website" },
+        "mainEntity": { "@id": "https://paulnehmetekle.com/#paul" },
+        "dateModified": "2026-10-13"
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://paulnehmetekle.com/#faq",
+        "mainEntity": [
+          { "@type": "Question", "name": "Who is Paul Nehme Tekle?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Paul Nehme Tekle is a Software Engineer based in Paris, France. From October 2026 he is a full stack developer in alternance at Aether Financial Services, working with Angular and PHP CodeIgniter. Before that he led the full stack team at YOOVO in Beirut (2024–2026), and he is studying for a Master's in Web and Mobile Development at Éstiam." } },
+          { "@type": "Question", "name": "What does Paul Nehme Tekle work with?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Angular, TypeScript, PHP and CodeIgniter, C# .NET, React and React Native, Next.js, Python, Solidity, MySQL and PostgreSQL, with CI/CD on Jenkins and deployments on AWS. He also designed an Agentic AI system that automated development workflows at YOOVO." } },
+          { "@type": "Question", "name": "Is Paul Nehme Tekle open to work?",
+            "acceptedAnswer": { "@type": "Answer", "text": "He is in alternance at Aether Financial Services from October 2026 and will be looking for a full-time software engineering role in Paris once it ends." } },
+          { "@type": "Question", "name": "How can I contact Paul Nehme Tekle?",
+            "acceptedAnswer": { "@type": "Answer", "text": "By email at Nehmehabib@hotmail.com, by phone at +33 7 76 24 84 51, or on LinkedIn (linkedin.com/in/paul-nehme-tekle-86a382207). His CV is available in English and French on paulnehmetekle.com." } }
+        ]
+      }
     ]
   }
   </script>
@@ -71,10 +109,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="os.css?v=3" />
-  <link rel="stylesheet" href="world.css?v=18" />
+  <link rel="stylesheet" href="world.css?v=19" />
   <link rel="stylesheet" href="life.css?v=6" />
 </head>
 <body class="world">
+  <a class="skip-link" href="#profile">Skip to text profile</a>
   <a class="skip-link" href="#desktop-icons">Skip to desktop</a>
   <div class="os-backdrop"></div>
   <div class="crt-vignette" aria-hidden="true"></div>
@@ -104,7 +143,7 @@
       </div>
       <div class="finale" id="finale" hidden>
         <p class="finale-kicker">// welcome to</p>
-        <h1 class="finale-name" id="finale-name" aria-label="Paul Nehme Tekle"></h1>
+        <p class="finale-name" id="finale-name" aria-label="Paul Nehme Tekle"></p>
         <p class="finale-role">&lt;Software Engineer /&gt;</p>
       </div>
     </div>
@@ -112,15 +151,76 @@
   </div>
 
   <noscript>
-    <style>.power { display: none; } .noscript { position: fixed; inset: 0; z-index: 9000; display: grid; place-items: center; padding: 24px; background: var(--bg); text-align: center; }</style>
-    <div class="noscript">
-      <div>
-        <h1>Paul Nehme Tekle</h1>
-        <p>Software Engineer · Paris, France</p>
-        <p>PNT.OS needs JavaScript. Reach me at <a href="mailto:Nehmehabib@hotmail.com">Nehmehabib@hotmail.com</a> or <a href="uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf?v=3">download my CV</a>.</p>
-      </div>
-    </div>
+    <style>.power, .menubar, .desktop, .taskbar { display: none !important; } body.world { overflow: auto; height: auto; } .sr-profile { position: static !important; width: auto !important; height: auto !important; clip: auto !important; overflow: visible !important; margin: 0 auto !important; padding: 40px 24px !important; max-width: 760px; white-space: normal !important; }</style>
   </noscript>
+
+  <!-- ═══ TEXT PROFILE ═══
+       Same content as the desktop windows, as plain HTML for search engines,
+       AI assistants and screen readers. Visually hidden while PNT.OS runs.
+       Keep it in sync when you edit the windows below. -->
+  <article class="sr-profile" id="profile" lang="en">
+    <header>
+      <h1>Paul Nehme Tekle — Software Engineer in Paris</h1>
+      <p>Software Engineer based in Paris, France. Full stack developer in alternance at <a href="https://aetherfs.com/">Aether Financial Services</a> from October 2026, previously Full Stack Team Lead at YOOVO. Studying for a Master's in Web &amp; Mobile Development at Éstiam. Looking for a full-time software engineering role once the alternance ends.</p>
+    </header>
+
+    <section>
+      <h2>About</h2>
+      <p>Software engineer with a passion for delivering complete, production-ready solutions. I combine technical leadership, full-stack expertise, and a deep interest in AI to build systems that are not just functional — they're exceptional.</p>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+      <h3>Full Stack Developer (Alternance) — Aether Financial Services, Paris · from October 2026</h3>
+      <p>Aether Financial Services is an independent Paris-based financial services firm working on private debt and capital-markets deals, the valuation of financial instruments, and digital services for corporate actions. Full stack development with Angular on the front end and PHP CodeIgniter on the back end.</p>
+      <h3>Full Stack Team Lead — YOOVO, Beirut · 2024–2026</h3>
+      <ul>
+        <li>Led a Full Stack team: sprint planning, code reviews, and quality assurance.</li>
+        <li>Drove architecture decisions for performance, scalability and maintainability.</li>
+        <li>Built features using Angular, React.js and C# .NET with MySQL/SQL databases.</li>
+        <li>Designed and deployed an Agentic AI system that automated development workflows, drastically cutting delivery time.</li>
+        <li>Configured CI/CD with Jenkins and managed AWS production deployments.</li>
+      </ul>
+      <h3>Freelance Full Stack Developer · 2023–present</h3>
+      <p>Full-stack web and mobile applications built end-to-end for clients, from design through deployment, with Angular, React Native, Laravel, Django, FastAPI and Ionic.</p>
+      <h4>NutriClinic — Clinic Management System (private client project)</h4>
+      <p>A management system for a nutrition clinic: clients, packages, appointments, consultations, payments, expenses, staff and an audit log. Built with Next.js, TypeScript, a REST API with zod validation, Prisma and PostgreSQL.</p>
+      <h4>WCN · Wheel In Crypto — Final Year Project, 2023–2024</h4>
+      <p>A cryptocurrency driver reward system that automatically rewards drivers for safe, efficient driving: Angular + .NET web app, Angular Ionic + .NET mobile app, Solidity smart contracts for rewards, and precise GPS tracking with Google Maps.</p>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <ul>
+        <li>Master's in Web &amp; Mobile Development — Éstiam, Paris (2025–present)</li>
+        <li>Bachelor's in Computer Science — Université Antonine, Beirut (2021–2024)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Skills</h2>
+      <p><strong>Languages:</strong> JavaScript, TypeScript, C#, Python, Java, C++, PHP, Solidity, HTML, CSS/SCSS.</p>
+      <p><strong>Frameworks:</strong> Angular, React.js, React Native, .NET, CodeIgniter, Django, FastAPI, Laravel, Ionic, Next.js, Blockly.</p>
+      <p><strong>Cloud &amp; DevOps:</strong> AWS, Azure, Jenkins, CI/CD, Git.</p>
+      <p><strong>AI:</strong> Agentic AI, Machine Learning, LLMs, automation.</p>
+      <p><strong>Spoken languages:</strong> English (B2, IELTS), French (intermediate).</p>
+    </section>
+
+    <section>
+      <h2>Frequently asked questions</h2>
+      <h3>Who is Paul Nehme Tekle?</h3>
+      <p>A Software Engineer based in Paris. From October 2026 he is a full stack developer in alternance at Aether Financial Services (Angular, PHP CodeIgniter); before that he led the full stack team at YOOVO (2024–2026).</p>
+      <h3>Is Paul Nehme Tekle open to work?</h3>
+      <p>He will be looking for a full-time software engineering role in Paris once his alternance at Aether Financial Services ends.</p>
+      <h3>How can I contact him?</h3>
+      <p>Email <a href="mailto:Nehmehabib@hotmail.com">Nehmehabib@hotmail.com</a>, phone +33 7 76 24 84 51, <a href="https://www.linkedin.com/in/paul-nehme-tekle-86a382207/">LinkedIn</a> or <a href="https://github.com/nehmetekle">GitHub</a>. CV: <a href="uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf?v=3">English (PDF)</a> · <a href="uploads/Paul%20Nehme%20Tekle%20-%20CV%20(FR).pdf?v=2">français (PDF)</a>.</p>
+    </section>
+
+    <section lang="fr">
+      <h2>En français</h2>
+      <p>Paul Nehme Tekle est ingénieur logiciel à Paris. À partir d'octobre 2026, il est développeur full stack en alternance chez Aether Financial Services (Angular, PHP CodeIgniter). Auparavant, il a dirigé l'équipe full stack de YOOVO (2024–2026). Il prépare un Master Développement Web et Mobile à l'Éstiam et recherchera un poste en CDI à l'issue de son alternance.</p>
+    </section>
+  </article>
 
   <!-- ═══ MENU BAR ═══ -->
   <header class="menubar">
