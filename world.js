@@ -2,8 +2,8 @@
    PNT.OS — window manager + terminal
 ════════════════════════════════════════ */
 
-const CV_URL = 'uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf?v=2';
-const CV_FR_URL = 'uploads/Paul%20Nehme%20Tekle%20-%20CV%20(FR).pdf';
+const CV_URL = 'uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf?v=3';
+const CV_FR_URL = 'uploads/Paul%20Nehme%20Tekle%20-%20CV%20(FR).pdf?v=2';
 const GITHUB_URL = 'https://github.com/nehmetekle';
 
 // Photo: put one in uploads/ and set its path here, e.g. 'uploads/photo.jpg'
@@ -17,8 +17,7 @@ if (PHOTO_URL) {
 const APPS = {
   readme:    { title: 'welcome.md',  glyph: '✦',  tpl: 'tpl-readme',    w: 440, h: 400 },
   about:     { title: 'about.txt',   glyph: '▣',  tpl: 'tpl-about',     w: 540, h: 520 },
-  career:    { title: 'career/',     glyph: '▤',  tpl: 'tpl-career',    w: 620, h: 580 },
-  projects:  { title: 'projects/',   glyph: '◆',  tpl: 'tpl-projects',  w: 700, h: 640 },
+  career:    { title: 'career/',     glyph: '▤',  tpl: 'tpl-career',    w: 680, h: 640 },
   skills:    { title: 'skills.sh',   glyph: '❯',  tpl: 'tpl-skills',    w: 580, h: 540 },
   education: { title: 'education/',  glyph: '◎',  tpl: 'tpl-education', w: 480, h: 320 },
   contact:   { title: 'contact.app', glyph: '✉',  tpl: 'tpl-contact',   w: 500, h: 540 },
@@ -283,14 +282,13 @@ const HELP = [
   ['whoami',      'whoami',        'who is paul?'],
   ['about',       'about',         'open about.txt'],
   ['career',      'career',        'open career/'],
-  ['projects',    'projects',      'open projects/'],
   ['skills',      'skills',        'run skills.sh'],
   ['education',   'education',     'open education/'],
   ['contact',     'contact',       'open contact.app'],
   ['cv',          'cv',            'download my CV (`cv fr` for French)'],
   ['github',      'github',        'open my GitHub'],
   ['ls',          'ls',            'list desktop files'],
-  ['open <file>', 'open projects', 'open any desktop file'],
+  ['open <file>', 'open career',   'open any desktop file'],
   ['play',        'play',          'play Byte Runner 🎮'],
   ['neofetch',    'neofetch',      'system info'],
   ['history',     'history',       'commands you ran'],
@@ -304,7 +302,7 @@ const HELP = [
   ['exit',        'exit',          'log out and reboot'],
 ];
 // Shortcut buttons pinned to the top of the terminal
-const QUICK_CMDS = ['help', 'whoami', 'about', 'career', 'projects', 'skills', 'contact', 'play', 'matrix', 'clear'];
+const QUICK_CMDS = ['help', 'whoami', 'about', 'career', 'skills', 'contact', 'play', 'matrix', 'clear'];
 
 const runButton = (label, cmd) =>
   `<button type="button" class="term-run" data-cmd="${cmd}">${escapeHtml(label)}</button>`;
@@ -370,11 +368,11 @@ const COMMANDS = {
     return '<span class="muted">initiating hack.exe…</span>';
   },
 };
-['about', 'career', 'projects', 'skills', 'education', 'contact'].forEach(id => {
+['about', 'career', 'skills', 'education', 'contact'].forEach(id => {
   COMMANDS[id] = () => { openApp(id); return `<span class="muted">opened ${APPS[id].title}</span>`; };
 });
 Object.assign(COMMANDS, {
-  experience: COMMANDS.career, work: COMMANDS.career, hire: COMMANDS.contact,
+  experience: COMMANDS.career, work: COMMANDS.career, projects: COMMANDS.career, hire: COMMANDS.contact,
   logout: COMMANDS.exit, reboot: COMMANDS.exit, game: COMMANDS.play, '?': COMMANDS.help,
 });
 
@@ -470,7 +468,7 @@ function logout() {
 document.getElementById('logout').addEventListener('click', logout);
 
 // Old section links (/#projects, /#experience…) open the matching window
-const HASH_APPS = { about: 'about', experience: 'career', career: 'career', skills: 'skills', projects: 'projects', education: 'education', contact: 'contact' };
+const HASH_APPS = { about: 'about', experience: 'career', career: 'career', skills: 'skills', projects: 'career', education: 'education', contact: 'contact' };
 function openFromHash() {
   const id = HASH_APPS[location.hash.slice(1).toLowerCase()];
   if (id) openApp(id);

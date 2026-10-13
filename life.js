@@ -125,15 +125,14 @@ const LIFE = (() => {
   ];
   const IDLE_LINES = [
     'la la la… 🎵',
-    'I wonder what\'s in projects/ 👀',
+    'I wonder what\'s in career/ 👀',
     '*beep*',
     'Paul pushed code today. Probably.',
     'Double-click an icon, I won\'t tell anyone.',
   ];
   const OPEN_LINES = {
     about:     'That\'s Paul! He\'s cool, I promise.',
-    career:    'From leading a team at YOOVO to fintech at Aether 🚀',
-    projects:  'WCN is my favourite — crypto for good drivers 🚗💰',
+    career:    'From leading a team at YOOVO to fintech at Aether 🚀 (WCN is my favourite!)',
     skills:    'So many skills. I only know "beep".',
     education: 'Master\'s at Éstiam — Paul never stops learning 🎓',
     contact:   'Yes! Say hi to Paul 👋',

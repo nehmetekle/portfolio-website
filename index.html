@@ -71,7 +71,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="os.css?v=3" />
-  <link rel="stylesheet" href="world.css?v=14" />
+  <link rel="stylesheet" href="world.css?v=15" />
   <link rel="stylesheet" href="life.css?v=6" />
 </head>
 <body class="world">
@@ -117,7 +117,7 @@
       <div>
         <h1>Paul Nehme Tekle</h1>
         <p>Software Engineer · Paris, France</p>
-        <p>PNT.OS needs JavaScript. Reach me at <a href="mailto:Nehmehabib@hotmail.com">Nehmehabib@hotmail.com</a> or <a href="uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf?v=2">download my CV</a>.</p>
+        <p>PNT.OS needs JavaScript. Reach me at <a href="mailto:Nehmehabib@hotmail.com">Nehmehabib@hotmail.com</a> or <a href="uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf?v=3">download my CV</a>.</p>
       </div>
     </div>
   </noscript>
@@ -179,7 +179,7 @@
         <li><b>Drag</b> windows by their title bar (on desktop)</li>
         <li>Open the <b>terminal</b> and type <code>help</code></li>
       </ul>
-      <p class="doc-muted">In a hurry? <button type="button" class="link" data-open="contact">Get in touch</button> or <a href="uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf?v=2" target="_blank" rel="noopener">grab my CV ↗</a></p>
+      <p class="doc-muted">In a hurry? <button type="button" class="link" data-open="contact">Get in touch</button> or <a href="uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf?v=3" target="_blank" rel="noopener">grab my CV ↗</a></p>
     </div>
   </template>
 
@@ -241,47 +241,27 @@
           <li>Integrated third-party APIs, cloud databases, and external services</li>
           <li>Managed full lifecycles — from discovery through testing and production deployment</li>
         </ul>
-        <div class="chips"><span>Angular</span><span>React Native</span><span>Laravel</span><span>Django</span><span>FastAPI</span><span>Ionic</span></div>
-      </article>
-    </div>
-  </template>
-
-  <template id="tpl-projects">
-    <div class="doc">
-      <p class="doc-kicker">// projects/</p>
-
-      <article class="project">
-        <div class="project-head"><span class="project-num">01</span><h3>NutriClinic — Clinic Management System</h3></div>
-        <p class="mission-role">Full-stack · private client project</p>
-        <p>A management system for a nutrition clinic: clients, packages, appointments, consultations, payments, expenses, staff and an audit log. Built in stages — a clickable demo first, then a real REST API and database.</p>
-        <div class="flow" aria-label="Architecture">
-          <span>React UI</span><i>→</i><span>Next.js API routes</span><i>→</i><span>zod validation</span><i>→</i><span>Prisma</span><i>→</i><span>PostgreSQL</span>
+        <div class="sub-project">
+          <h4>NutriClinic — Clinic Management System <span class="tag-private">🔒 private client project</span></h4>
+          <p>A management system for a nutrition clinic: clients, packages, appointments, consultations, payments, expenses, staff and an audit log. Built in stages — a clickable demo first, then a real REST API and database.</p>
+          <div class="flow" aria-label="Architecture">
+            <span>React UI</span><i>→</i><span>Next.js API routes</span><i>→</i><span>zod validation</span><i>→</i><span>Prisma</span><i>→</i><span>PostgreSQL</span>
+          </div>
         </div>
-        <div class="chips"><span>Next.js</span><span>TypeScript</span><span>Prisma</span><span>PostgreSQL</span><span>REST</span></div>
-        <p class="doc-muted">🔒 Private — the code and the live app aren't public.</p>
-      </article>
-
-      <article class="project">
-        <div class="project-head"><span class="project-num">02</span><h3>WCN · Wheel In Crypto</h3></div>
-        <p class="mission-role">Final Year Project · Cryptocurrency &amp; Driver Reward System · 2023 — 2024</p>
-        <p>A platform that automatically rewards drivers in cryptocurrency for safe, efficient driving.</p>
-        <ul class="doc-list">
-          <li>Full-stack architecture: Angular + .NET (web) and Angular Ionic + .NET (mobile)</li>
-          <li>Smart contracts for automatic rewards based on driving behavior</li>
-          <li>Precise GPS tracking via Google Maps</li>
-          <li>Complete project management from front-end to blockchain back-end</li>
-        </ul>
-        <div class="flow" aria-label="Architecture">
-          <span>Ionic mobile app</span><i>→</i><span>GPS tracking</span><i>→</i><span>.NET API</span><i>→</i><span>Solidity smart contract</span><i>→</i><span>crypto reward</span>
+        <div class="sub-project">
+          <h4>WCN · Wheel In Crypto <span class="tag-date">2023 — 2024</span></h4>
+          <p>A platform that automatically rewards drivers in cryptocurrency for safe, efficient driving.</p>
+          <ul class="doc-list">
+            <li>Full-stack architecture: Angular + .NET (web) and Angular Ionic + .NET (mobile)</li>
+            <li>Smart contracts for automatic rewards based on driving behavior</li>
+            <li>Precise GPS tracking via Google Maps</li>
+            <li>Complete project management from front-end to blockchain back-end</li>
+          </ul>
+          <div class="flow" aria-label="Architecture">
+            <span>Ionic mobile app</span><i>→</i><span>GPS tracking</span><i>→</i><span>.NET API</span><i>→</i><span>Solidity smart contract</span><i>→</i><span>crypto reward</span>
+          </div>
         </div>
-        <div class="chips"><span>Angular</span><span>.NET</span><span>Ionic</span><span>Solidity</span><span>Google Maps API</span><span>MySQL</span></div>
-      </article>
-
-      <article class="project">
-        <div class="project-head"><span class="project-num">03</span><h3>Freelance Projects</h3></div>
-        <p class="mission-role">Freelance · 2023 — Present</p>
-        <p>Production-grade web and mobile applications built end-to-end for clients spanning e-commerce, SaaS dashboards, and bespoke business tools — all delivered from design through deployment.</p>
-        <div class="chips"><span>Angular</span><span>React Native</span><span>Laravel</span><span>Django</span><span>FastAPI</span><span>Ionic</span></div>
+        <div class="chips"><span>Angular</span><span>React Native</span><span>Next.js</span><span>.NET</span><span>Solidity</span><span>Laravel</span><span>Django</span><span>FastAPI</span><span>Ionic</span><span>PostgreSQL</span></div>
       </article>
     </div>
   </template>
@@ -328,8 +308,8 @@
         <a href="tel:+33776248451"><span>Phone</span>(+33) 7 76 24 84 51</a>
         <a href="https://www.linkedin.com/in/paul-nehme-tekle-86a382207/" target="_blank" rel="noopener"><span>LinkedIn</span>Paul Nehme Tekle ↗</a>
         <a href="https://github.com/nehmetekle" target="_blank" rel="noopener"><span>GitHub</span>github.com/nehmetekle ↗</a>
-        <a href="uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf?v=2" target="_blank" rel="noopener"><span>CV</span>Download PDF (EN) ↗</a>
-        <a href="uploads/Paul%20Nehme%20Tekle%20-%20CV%20(FR).pdf" target="_blank" rel="noopener"><span>CV (FR)</span>Télécharger le PDF ↗</a>
+        <a href="uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf?v=3" target="_blank" rel="noopener"><span>CV</span>Download PDF (EN) ↗</a>
+        <a href="uploads/Paul%20Nehme%20Tekle%20-%20CV%20(FR).pdf?v=2" target="_blank" rel="noopener"><span>CV (FR)</span>Télécharger le PDF ↗</a>
       </div>
       <div class="contact-actions">
         <a class="btn btn-primary" href="mailto:Nehmehabib@hotmail.com">Email me ✉</a>
@@ -339,9 +319,9 @@
   </template>
 
   <script src="fx.js?v=5"></script>
-  <script src="life.js?v=12"></script>
+  <script src="life.js?v=13"></script>
   <script src="friends.js?v=2"></script>
   <script src="game.js?v=3"></script>
-  <script src="world.js?v=18"></script>
+  <script src="world.js?v=19"></script>
 </body>
 </html>

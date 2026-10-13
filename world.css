@@ -687,3 +687,14 @@ body.world {
   .polaroid figcaption { font-size: 0.85rem; }
   .doc h2 { font-size: 1.3rem; }
 }
+
+/* Projects nested inside a career entry */
+.sub-project {
+  padding: 12px 14px;
+  border: 1px dashed var(--border-hi);
+  border-radius: 6px;
+  background: rgba(5,7,13,0.35);
+}
+.sub-project > * + * { margin-top: 8px; }
+.sub-project h4 { font-family: var(--font-display); font-size: 0.98rem; color: #fff; }
+.tag-private, .tag-date { margin-left: 6px; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 400; color: var(--orange); white-space: nowrap; }
