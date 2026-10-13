@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════
-   PNT.OS effects — synthesized sound, live wallpaper,
+   PNT.OS effects — synthesized sound,
    matrix rain and text decrypt
 ════════════════════════════════════════ */
 const FX = (() => {
@@ -109,118 +109,6 @@ const FX = (() => {
     });
   }
 
-  /* ─── Live wallpaper (WebGL) ───────────── */
-  const FRAG = `
-    precision mediump float;
-    uniform vec2 res;
-    uniform float time;
-    uniform vec2 mouse;
-
-    float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-    float noise(vec2 p) {
-      vec2 i = floor(p), f = fract(p);
-      f = f * f * (3.0 - 2.0 * f);
-      return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
-                 mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
-    }
-    float fbm(vec2 p) {
-      float v = 0.0, a = 0.5;
-      for (int i = 0; i < 5; i++) { v += a * noise(p); p *= 2.03; a *= 0.5; }
-      return v;
-    }
-
-    void main() {
-      vec2 uv = gl_FragCoord.xy / res.y * 0.85;
-      float t = time * 0.03;
-
-      // Domain-warped noise field
-      vec2 q = vec2(fbm(uv * 1.3 + t), fbm(uv * 1.3 + vec2(5.2, 1.3) - t));
-      vec2 w = vec2(fbm(uv * 1.3 + 3.0 * q + vec2(1.7, 9.2) + t * 1.4),
-                    fbm(uv * 1.3 + 3.0 * q + vec2(8.3, 2.8) - t));
-      float f = fbm(uv * 1.3 + 3.0 * w);
-
-      // Thin glowing contour ribbons
-      float r1 = smoothstep(0.03, 0.0, abs(f - 0.56));
-      float r2 = smoothstep(0.018, 0.0, abs(f - 0.44));
-      float r3 = smoothstep(0.012, 0.0, abs(f - 0.66));
-
-      vec3 col = vec3(0.031, 0.043, 0.078);
-      col += vec3(0.06, 0.02, 0.05) * smoothstep(0.3, 0.8, f);
-      col += vec3(1.0, 0.2, 0.3) * r1 * 0.24;
-      col += vec3(1.0, 0.55, 0.26) * r2 * 0.14;
-      col += vec3(0.6, 0.65, 1.0) * r3 * 0.07;
-
-      // Light that follows the mouse and lights up the ribbons
-      vec2 m = mouse / res.y;
-      float d = length(uv - m);
-      float glow = exp(-d * d * 7.0);
-      col += vec3(1.0, 0.2, 0.3) * glow * (0.06 + (r1 + r2) * 0.8);
-
-      // Vignette
-      vec2 c = gl_FragCoord.xy / res - 0.5;
-      col *= 1.0 - dot(c, c) * 1.2;
-      gl_FragColor = vec4(col, 1.0);
-    }`;
-
-  function wallpaper(canvas) {
-    const gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' });
-    if (!gl) return false;
-
-    const compile = (type, src) => {
-      const s = gl.createShader(type);
-      gl.shaderSource(s, src);
-      gl.compileShader(s);
-      return s;
-    };
-    const prog = gl.createProgram();
-    gl.attachShader(prog, compile(gl.VERTEX_SHADER, 'attribute vec2 p; void main() { gl_Position = vec4(p, 0.0, 1.0); }'));
-    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return false;
-    gl.useProgram(prog);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    const loc = gl.getAttribLocation(prog, 'p');
-    gl.enableVertexAttribArray(loc);
-    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-
-    const uRes = gl.getUniformLocation(prog, 'res');
-    const uTime = gl.getUniformLocation(prog, 'time');
-    const uMouse = gl.getUniformLocation(prog, 'mouse');
-
-    // Render at reduced resolution — the field is soft, and it keeps laptops cool
-    const SCALE = 0.5;
-    const target = { x: 0, y: 0 }, mouse = { x: 0, y: 0 };
-    function resize() {
-      canvas.width = Math.max(1, canvas.clientWidth * SCALE);
-      canvas.height = Math.max(1, canvas.clientHeight * SCALE);
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.uniform2f(uRes, canvas.width, canvas.height);
-      target.x = mouse.x = canvas.width * 0.7;
-      target.y = mouse.y = canvas.height * 0.6;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-    window.addEventListener('pointermove', e => {
-      const r = canvas.getBoundingClientRect();
-      target.x = (e.clientX - r.left) * SCALE;
-      target.y = (r.height - (e.clientY - r.top)) * SCALE;
-    });
-
-    const t0 = performance.now() - 20000;
-    function draw(now) {
-      mouse.x += (target.x - mouse.x) * 0.06;
-      mouse.y += (target.y - mouse.y) * 0.06;
-      gl.uniform1f(uTime, (now - t0) / 1000);
-      gl.uniform2f(uMouse, mouse.x, mouse.y);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-      if (!reduceMotion) requestAnimationFrame(draw);
-    }
-    requestAnimationFrame(draw);
-    return true;
-  }
-
   /* ─── Matrix rain ──────────────────────── */
   function matrix(host, duration = 6000) {
     const canvas = document.createElement('canvas');
@@ -263,5 +151,5 @@ const FX = (() => {
     setTimeout(stop, duration);
   }
 
-  return { sfx, isMuted, setMuted, decrypt, wallpaper, matrix, reduceMotion };
+  return { sfx, isMuted, setMuted, decrypt, matrix, reduceMotion };
 })();

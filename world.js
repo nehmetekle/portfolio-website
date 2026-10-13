@@ -490,8 +490,8 @@ function openStartupWindows() {
   setTimeout(openFromHash, 260);
 }
 
-/* ─── Live wallpaper + sound toggle ─────── */
-if (!FX.wallpaper(document.getElementById('wallpaper'))) {
+/* ─── Live Paris wallpaper + sound toggle ── */
+if (!SKYLINE.start(document.getElementById('wallpaper'))) {
   document.getElementById('wallpaper').remove();
 }
 

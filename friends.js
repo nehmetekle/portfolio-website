@@ -298,6 +298,7 @@ const FRIENDS = (() => {
     weatherText = `${icon}  Paris right now: <span class="warn">${temp}°C</span>, ${label}` +
       (['rain', 'snow', 'storm'].includes(kind) ? '\n<span class="muted">(look at the desktop 👀)</span>' : '');
 
+    SKYLINE.setWeather(kind);
     if (['rain', 'snow', 'storm'].includes(kind) && !FX.reduceMotion) precipitation(kind);
     const comments = {
       rain: 'It\'s raining in Paris ☔ good day to code inside',
