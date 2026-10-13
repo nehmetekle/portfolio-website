@@ -44,6 +44,9 @@ const LIFE = (() => {
     neo:       ['🐇', 'Neo',           'entered the matrix'],
     hacker:    ['🕶️', 'Script kiddie', 'tried to hack Paul'],
     friend:    ['🤖', 'Best friends',  'Byte likes you now'],
+    rollercoaster: ['🎢', 'Rollercoaster', 'threw Byte across the desktop'],
+    debugger:  ['🐛', 'Debugger',      'squashed 3 bugs yourself'],
+    catperson: ['🐈', 'Cat person',    'pet Null the cat'],
   };
   const TOTAL = Object.keys(ACHIEVEMENTS).length;
   const unlocked = new Set(JSON.parse(localStorage.getItem('pnt-achievements') || '[]'));
@@ -116,6 +119,8 @@ const LIFE = (() => {
     'Beep boop. That tickles.',
     'Try <code>hack</code> in the terminal. I dare you.',
     'Have you found all the achievements? Type <code>achievements</code>',
+    'You can pick me up, you know. Just drag me!',
+    'Have you met Null? She naps on top of your windows 🐈',
   ];
   const IDLE_LINES = [
     'la la la… 🎵',
@@ -135,22 +140,36 @@ const LIFE = (() => {
     terminal:  'Type <code>help</code> if you get lost!',
   };
 
+  const HELD_LINES = ['Wheee! 🎢', 'Put me down! 😱', 'I can see my house from here!', 'Careful, I\'m fragile hardware!'];
+  const LAND_LINES = ['Ouch. 🤕', 'Again! Again!', '…I meant to do that.', 'Nailed the landing 🤸'];
+  const CATCH_LINES = ['Bug fixed ✔ shipped to prod', 'Another one bites the dust 🐛', 'Squashed! Paul would be proud.', 'Got it! QA can relax now.'];
+
   const pet = {
-    el: null, sprite: null, bubble: null,
-    x: 0, dir: 1, target: 0, state: 'idle', until: 0, clicks: 0, bubbleTimer: 0,
+    el: null, sprite: null, eyes: null, bubble: null,
+    x: 0, y: 0, vx: 0, vy: 0, dir: 1, target: 0,
+    state: 'idle', until: 0, clicks: 0, throws: 0, bubbleTimer: 0,
+    prey: null, dragged: false, mouse: { x: -1e4, y: -1e4 },
 
     spawn() {
       const el = document.createElement('button');
       el.type = 'button';
       el.className = 'pet';
-      el.setAttribute('aria-label', 'Byte, the desktop robot — click to say hi');
+      el.setAttribute('aria-label', 'Byte, the desktop robot — click to say hi, drag to pick him up');
       el.innerHTML = `<span class="pet-bubble" hidden></span>${SPRITE}<span class="pet-zzz" aria-hidden="true">z<i>z</i><i>z</i></span>`;
       desktop.appendChild(el);
       this.el = el;
       this.sprite = el.querySelector('.pet-sprite');
+      this.eyes = el.querySelector('.p-eyes');
       this.bubble = el.querySelector('.pet-bubble');
       this.x = this.minX();
-      el.addEventListener('click', () => this.poke());
+
+      el.addEventListener('click', () => {
+        if (this.dragged) return;
+        this.poke();
+      });
+      el.addEventListener('pointerdown', e => this.grab(e));
+      document.addEventListener('pointermove', e => { this.mouse = { x: e.clientX, y: e.clientY }; }, { passive: true });
+
       this.setState('walk');
       requestAnimationFrame(t => this.loop(t, t));
       setTimeout(() => this.say('Oh hi! 👋 Welcome to Paul\'s desktop'), 1200);
@@ -162,29 +181,134 @@ const LIFE = (() => {
     setState(state, ms = 0) {
       this.state = state;
       this.until = performance.now() + ms;
-      this.el.classList.toggle('walking', state === 'walk');
+      this.el.classList.toggle('walking', state === 'walk' || state === 'chase');
+      this.el.classList.toggle('running', state === 'chase');
       this.el.classList.toggle('sleeping', state === 'sleep');
+      this.el.classList.toggle('held', state === 'held');
       if (state === 'walk') {
         this.target = this.minX() + Math.random() * (this.maxX() - this.minX());
         this.dir = this.target > this.x ? 1 : -1;
       }
+      if (state !== 'chase') this.prey = null;
     },
 
     loop(now, last) {
       const dt = Math.min(0.05, (now - last) / 1000);
-      if (this.state === 'walk') {
-        this.x += this.dir * 46 * dt;
-        if ((this.dir > 0 && this.x >= this.target) || (this.dir < 0 && this.x <= this.target)) {
-          this.setState('idle', 2500 + Math.random() * 4000);
-          if (Math.random() < 0.3) this.say(pick(IDLE_LINES));
+      const maxPhysX = desktop.clientWidth - 56;
+
+      switch (this.state) {
+        case 'walk':
+          this.x += this.dir * 46 * dt;
+          if ((this.dir > 0 && this.x >= this.target) || (this.dir < 0 && this.x <= this.target)) {
+            this.setState('idle', 2500 + Math.random() * 4000);
+            if (Math.random() < 0.3) this.say(pick(IDLE_LINES));
+          }
+          break;
+        case 'idle':
+          if (now > this.until) this.setState('walk');
+          break;
+        case 'chase': {
+          const prey = this.prey;
+          if (!prey || !prey.alive) { this.setState('idle', 1500); break; }
+          const dx = prey.x - (this.x + 28);
+          this.dir = dx > 0 ? 1 : -1;
+          this.x += this.dir * 140 * dt;
+          if (Math.abs(dx) < 16 && prey.grounded) {
+            prey.catch();
+            this.hop();
+            FX.sfx.chirp();
+            this.say(pick(CATCH_LINES));
+            this.setState('idle', 2500);
+          }
+          break;
         }
-      } else if (this.state === 'idle' && now > this.until) {
-        this.setState('walk');
+        case 'fall':
+          this.vy -= 1900 * dt;
+          this.x += this.vx * dt;
+          this.y += this.vy * dt;
+          if (this.x < 0 || this.x > maxPhysX) {
+            this.vx *= -0.5;
+            this.x = Math.max(0, Math.min(maxPhysX, this.x));
+          }
+          if (this.y <= 0) {
+            this.y = 0;
+            if (this.vy < -380) {
+              this.vy *= -0.38;
+              this.vx *= 0.7;
+              FX.sfx.bonk();
+            } else {
+              this.vy = this.vx = 0;
+              this.setState('idle', 2200);
+              this.say(pick(LAND_LINES));
+              if (++this.throws === 1) unlock('rollercoaster');
+            }
+          }
+          break;
       }
-      this.x = Math.max(this.minX(), Math.min(this.maxX(), this.x));
-      this.el.style.transform = `translateX(${this.x}px)`;
+
+      if (this.state !== 'fall' && this.state !== 'held') this.x = Math.max(0, Math.min(this.maxX(), this.x));
+      this.el.style.transform = `translate(${this.x}px, ${-this.y}px)`;
       this.sprite.style.transform = `scaleX(${this.dir})`;
+      this.lookAtMouse();
       requestAnimationFrame(t => this.loop(t, now));
+    },
+
+    // Eyes follow the cursor (1 sprite pixel in each direction)
+    lookAtMouse() {
+      if (this.state === 'sleep') { this.eyes.style.translate = ''; return; }
+      const r = this.el.getBoundingClientRect();
+      const dx = this.mouse.x - (r.left + r.width / 2);
+      const dy = this.mouse.y - (r.top + r.height / 2);
+      const lookX = Math.abs(dx) > 30 ? Math.sign(dx) * this.dir : 0;
+      const lookY = dy < -80 ? -1 : 0;
+      this.eyes.style.translate = `${lookX}px ${lookY}px`;
+    },
+
+    // Drag to pick Byte up, release to throw him
+    grab(e) {
+      if (e.button !== 0) return;
+      const el = this.el;
+      const startX = e.clientX, startY = e.clientY;
+      let moved = false, last = { x: e.clientX, y: e.clientY, t: performance.now() };
+      el.setPointerCapture(e.pointerId);
+
+      const move = ev => {
+        if (!moved && Math.hypot(ev.clientX - startX, ev.clientY - startY) < 6) return;
+        if (!moved) {
+          moved = true;
+          this.setState('held');
+          FX.sfx.chirp();
+          this.say(pick(HELD_LINES), 2500);
+        }
+        const r = desktop.getBoundingClientRect();
+        this.x = ev.clientX - r.left - 28;
+        this.y = Math.max(0, r.bottom - ev.clientY - 40);
+        const now = performance.now(), dt = Math.max(16, now - last.t) / 1000;
+        this.vx = (ev.clientX - last.x) / dt;
+        this.vy = (last.y - ev.clientY) / dt;
+        last = { x: ev.clientX, y: ev.clientY, t: now };
+      };
+      const up = () => {
+        el.removeEventListener('pointermove', move);
+        el.removeEventListener('pointerup', up);
+        el.removeEventListener('pointercancel', up);
+        if (!moved) return;
+        // Swallow the click that follows this pointerup
+        this.dragged = true;
+        setTimeout(() => (this.dragged = false));
+        this.vx = Math.max(-1400, Math.min(1400, this.vx));
+        this.vy = Math.max(-600, Math.min(1400, this.vy));
+        this.setState('fall');
+      };
+      el.addEventListener('pointermove', move);
+      el.addEventListener('pointerup', up);
+      el.addEventListener('pointercancel', up);
+    },
+
+    hop() {
+      this.el.classList.remove('jump');
+      void this.el.offsetWidth;   // restart the jump animation
+      this.el.classList.add('jump');
     },
 
     say(html, ms = 3800) {
@@ -198,17 +322,25 @@ const LIFE = (() => {
 
     poke() {
       if (this.state === 'sleep') { this.wake(); return; }
+      if (this.state === 'held' || this.state === 'fall') return;
       FX.sfx.chirp();
-      this.el.classList.remove('jump');
-      void this.el.offsetWidth;   // restart the jump animation
-      this.el.classList.add('jump');
+      this.hop();
       this.say(pick(CLICK_LINES));
       this.setState('idle', 3000);
       if (++this.clicks === 5) unlock('friend');
     },
 
+    // Called by friends.js when a bug reaches the ground
+    chase(prey) {
+      if (['sleep', 'held', 'fall', 'chase'].includes(this.state)) return false;
+      this.setState('chase');
+      this.prey = prey;
+      this.say('A BUG! 🐛 I\'ll get it!', 2200);
+      return true;
+    },
+
     sleep() {
-      if (this.state === 'sleep') return;
+      if (this.state === 'sleep' || this.state === 'held' || this.state === 'fall') return;
       this.setState('sleep');
       this.bubble.hidden = true;
     },
@@ -221,7 +353,7 @@ const LIFE = (() => {
     },
 
     react(id) {
-      if (OPEN_LINES[id] && this.state !== 'sleep') this.say(OPEN_LINES[id]);
+      if (OPEN_LINES[id] && !['sleep', 'held', 'fall'].includes(this.state)) this.say(OPEN_LINES[id]);
     },
   };
 
@@ -300,5 +432,9 @@ const LIFE = (() => {
     if (e.detail.name === 'hack') unlock('hacker');
   });
 
-  return { toast, achievementsReport };
+  return {
+    toast, unlock, achievementsReport, pet,
+    idleFor: () => Date.now() - lastInput,
+    saverOn: () => Boolean(saver),
+  };
 })();

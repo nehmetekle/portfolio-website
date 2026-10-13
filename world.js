@@ -269,7 +269,10 @@ const HELP = [
   ['open <file>', 'open projects', 'open any desktop file'],
   ['neofetch',    'neofetch',      'system info'],
   ['history',     'history',       'commands you ran'],
-  ['achievements', 'achievements', 'your progress (6 to find)'],
+  ['achievements', 'achievements', 'your progress (9 to find)'],
+  ['weather',     'weather',       'live weather in Paris'],
+  ['bugs',        'bugs',          'how many bugs got fixed'],
+  ['byte',        'byte',          'call Byte over'],
   ['matrix',      'matrix',        'follow the white rabbit'],
   ['hack',        'hack',          'don\'t.'],
   ['clear',       'clear',         'clear the screen'],
@@ -313,6 +316,9 @@ const COMMANDS = {
   exit: () => { setTimeout(logout, 400); return 'logging out…'; },
 
   achievements: () => LIFE.achievementsReport(),
+  weather: () => FRIENDS.weatherReport(),
+  bugs: () => FRIENDS.bugsReport(),
+  byte: () => { LIFE.pet.poke(); return '<span class="muted">Byte: beep boop! 🤖</span>'; },
 
   matrix: () => { FX.matrix(desktop); return '<span class="muted">wake up, visitor… (click to exit)</span>'; },
 

@@ -72,7 +72,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="os.css?v=3" />
   <link rel="stylesheet" href="world.css?v=6" />
-  <link rel="stylesheet" href="life.css?v=2" />
+  <link rel="stylesheet" href="life.css?v=3" />
 </head>
 <body class="world">
   <a class="skip-link" href="#desktop-icons">Skip to desktop</a>
@@ -148,6 +148,7 @@
         <p class="widget-greet" id="w-greet"></p>
         <p class="widget-time" id="w-time"></p>
         <p class="widget-date" id="w-date"></p>
+        <p class="widget-weather" id="w-weather" hidden></p>
         <p class="widget-status" id="w-status"></p>
       </section>
       <section class="widget widget-now">
@@ -166,6 +167,7 @@
   <footer class="taskbar">
     <button class="taskbar-start" id="taskbar-start" type="button" aria-label="Open terminal" title="Open terminal">❯_</button>
     <div class="taskbar-windows" id="taskbar-windows" aria-label="Open windows"></div>
+    <span class="bug-count" id="bug-count" hidden></span>
     <span class="taskbar-hint">tip: type <code>help</code> in the terminal</span>
   </footer>
 
@@ -309,8 +311,9 @@
     </div>
   </template>
 
-  <script src="fx.js?v=3"></script>
-  <script src="life.js?v=2"></script>
-  <script src="world.js?v=7"></script>
+  <script src="fx.js?v=4"></script>
+  <script src="life.js?v=3"></script>
+  <script src="friends.js?v=1"></script>
+  <script src="world.js?v=8"></script>
 </body>
 </html>
