@@ -7,6 +7,13 @@
   const splash = document.getElementById('splash');
   const label  = document.getElementById('splash-label');
 
+  // Visitors coming from the PNT.OS boot screen already sat through one intro
+  if (sessionStorage.getItem('pnt-booted')) {
+    splash.style.display = 'none';
+    setTimeout(() => window.dispatchEvent(new CustomEvent('splashDone')), 50);
+    return;
+  }
+
   // Lock scroll
   document.body.style.overflow = 'hidden';
 

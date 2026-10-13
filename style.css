@@ -227,8 +227,20 @@ body:has(button:hover) .cursor-follower::before {
   transition: color 0.2s;
 }
 .nav-links a:hover { color: var(--text); }
+.nav-world {
+  margin-left: 36px;
+  padding: 8px 14px;
+  border: 1px solid var(--border-hi);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  transition: color 0.2s, border-color 0.2s;
+}
+.nav-world:hover { color: var(--text); border-color: var(--red); }
 .nav-cta {
-  margin-left: 40px;
+  margin-left: 12px;
   padding: 9px 22px;
   background: var(--red);
   color: #080b14;
@@ -1255,7 +1267,7 @@ body:has(button:hover) .cursor-follower::before {
    RESPONSIVE
 ════════════════════════════════════════ */
 @media (max-width: 900px) {
-  .nav-links, .nav-cta { display: none; }
+  .nav-links, .nav-cta, .nav-world { display: none; }
   .nav-burger { display: flex; }
   .nav { padding: 0 24px; }
 

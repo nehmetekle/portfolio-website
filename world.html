@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PNT.OS — Paul Nehme Tekle's Developer World</title>
+  <meta name="description" content="Explore Paul Nehme Tekle's portfolio as a retro desktop: open windows, browse projects, and talk to the terminal." />
+  <link rel="canonical" href="https://paulnehmetekle.com/world.html" />
+  <meta property="og:type"  content="website" />
+  <meta property="og:url"   content="https://paulnehmetekle.com/world.html" />
+  <meta property="og:title" content="PNT.OS — Paul Nehme Tekle's Developer World" />
+  <meta property="og:description" content="A portfolio you can boot. Full Stack Developer · Agentic AI · Paris." />
+  <meta property="og:image" content="https://paulnehmetekle.com/og-image.png?v=20260422-2" />
+  <meta name="twitter:card"  content="summary_large_image" />
+  <meta name="twitter:image" content="https://paulnehmetekle.com/og-image.png?v=20260422-2" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#080b14" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="os.css?v=2" />
+  <link rel="stylesheet" href="world.css?v=3" />
+</head>
+<body class="world">
+  <a class="skip-link" href="#desktop-icons">Skip to desktop</a>
+  <div class="os-backdrop"></div>
+  <div class="crt-vignette" aria-hidden="true"></div>
+
+  <!-- ═══ POWER ON + LOGIN ═══ -->
+  <div class="power" id="power" aria-hidden="true">
+    <div class="power-screen">
+      <div class="login">
+        <div class="login-avatar">P<span>.</span></div>
+        <div class="login-host">PNT.OS · paul's workstation</div>
+        <div class="login-field"><span>login</span><b id="login-user"></b></div>
+        <div class="login-field"><span>password</span><b id="login-pass"></b></div>
+        <div class="login-status" id="login-status"></div>
+      </div>
+    </div>
+    <button class="boot-skip" id="power-skip" type="button">Skip →</button>
+  </div>
+
+  <!-- ═══ MENU BAR ═══ -->
+  <header class="menubar">
+    <a href="./" class="menubar-logo">◆ PNT<span>.</span>OS</a>
+    <span class="menubar-user">paul@pnt — Full Stack Developer</span>
+    <nav class="menubar-right" aria-label="Exit">
+      <a href="professional.html">Professional view</a>
+      <a href="./">Log out</a>
+      <time id="clock" class="menubar-clock"></time>
+    </nav>
+  </header>
+
+  <!-- ═══ DESKTOP ═══ -->
+  <main class="desktop" id="desktop">
+    <div class="desktop-watermark" aria-hidden="true">PNT<span>.</span></div>
+
+    <ul class="desktop-icons" id="desktop-icons" aria-label="Desktop">
+      <!-- filled from APPS in world.js -->
+    </ul>
+  </main>
+
+  <!-- ═══ TASKBAR ═══ -->
+  <footer class="taskbar">
+    <button class="taskbar-start" id="taskbar-start" type="button" aria-label="Open terminal" title="Open terminal">❯_</button>
+    <div class="taskbar-windows" id="taskbar-windows" aria-label="Open windows"></div>
+    <span class="taskbar-hint">tip: type <code>help</code> in the terminal</span>
+  </footer>
+
+  <!-- ═══════════════════════════════════════
+       WINDOW CONTENT — edit text here
+  ═══════════════════════════════════════ -->
+
+  <template id="tpl-readme">
+    <div class="doc">
+      <p class="doc-kicker">// welcome.md</p>
+      <h2>Hey, I'm Paul<span class="accent">.</span></h2>
+      <p>Full Stack Developer in Paris, building with <strong>Agentic AI</strong> and shipping production-ready web &amp; mobile apps.</p>
+      <p>This is my desktop. Have a look around:</p>
+      <ul class="doc-list">
+        <li><b>Double-click</b> (or tap) an icon to open it</li>
+        <li><b>Drag</b> windows by their title bar (on desktop)</li>
+        <li>Open the <b>terminal</b> and type <code>help</code></li>
+      </ul>
+      <p class="doc-muted">In a hurry? <a href="professional.html">Switch to the professional view →</a></p>
+    </div>
+  </template>
+
+  <template id="tpl-about">
+    <div class="doc">
+      <p class="doc-kicker">// about.txt</p>
+      <h2>Building the future, <span class="accent">one commit at a time.</span></h2>
+      <p>Software developer with a passion for delivering complete, production-ready solutions. I combine technical leadership, full-stack expertise, and a deep interest in AI to build systems that are not just functional — they're exceptional.</p>
+      <p>Currently based in Paris, pursuing a Master's in Web &amp; Mobile Development at Éstiam while leading full-stack development at YOOVO — where I shipped an Agentic AI system that fundamentally changed how our team ships features.</p>
+      <div class="stat-row">
+        <div><b>3+</b><span>years of experience</span></div>
+        <div><b>15+</b><span>projects delivered</span></div>
+        <div><b>10+</b><span>technologies</span></div>
+      </div>
+      <div class="chips"><span>Agentic AI</span><span>Machine Learning</span><span>System Architecture</span></div>
+    </div>
+  </template>
+
+  <template id="tpl-career">
+    <div class="doc">
+      <p class="doc-kicker">// career/ — missions 2023 → present</p>
+      <article class="mission">
+        <div class="mission-head">
+          <h3>YOOVO</h3>
+          <span>2024 — Present</span>
+        </div>
+        <p class="mission-role">Full Stack Developer · Beirut</p>
+        <ul class="doc-list">
+          <li>Led a Full Stack team — sprint planning, code reviews, and quality assurance</li>
+          <li>Drove architecture decisions for performance, scalability and maintainability</li>
+          <li>Built features using Angular, React.js, C# .NET with MySQL/SQL databases</li>
+          <li>Designed and deployed an <strong>Agentic AI system</strong> that automated dev workflows, drastically cutting delivery time</li>
+          <li>Configured CI/CD via Jenkins and managed AWS production deployments</li>
+        </ul>
+        <div class="chips"><span>Angular</span><span>C# .NET</span><span>AWS</span><span>Jenkins</span><span>Python</span><span>Agentic AI</span><span>Raspberry Pi</span></div>
+      </article>
+      <article class="mission">
+        <div class="mission-head">
+          <h3>Freelance</h3>
+          <span>2023 — Present</span>
+        </div>
+        <p class="mission-role">Full Stack Developer · Remote</p>
+        <ul class="doc-list">
+          <li>Designed and built multiple full-stack web and mobile applications end-to-end</li>
+          <li>Crafted responsive front-end interfaces paired with scalable back-end architectures</li>
+          <li>Integrated third-party APIs, cloud databases, and external services</li>
+          <li>Managed full lifecycles — from discovery through testing and production deployment</li>
+        </ul>
+        <div class="chips"><span>Angular</span><span>React Native</span><span>Laravel</span><span>Django</span><span>FastAPI</span><span>Ionic</span></div>
+      </article>
+    </div>
+  </template>
+
+  <template id="tpl-projects">
+    <div class="doc">
+      <p class="doc-kicker">// projects/</p>
+      <article class="project">
+        <div class="project-head"><span class="project-num">01</span><h3>Cryptocurrency Driver Reward System</h3></div>
+        <p class="mission-role">Final Year Project · 2023 — 2024</p>
+        <p>A full-stack blockchain platform that automatically rewards drivers for safe, efficient driving behavior. Smart contracts on Ethereum handle reward distribution; real-time GPS tracking via Google Maps captures performance data; native mobile app delivers the experience seamlessly.</p>
+        <div class="chips"><span>Angular</span><span>.NET</span><span>Ionic</span><span>Solidity</span><span>Google Maps API</span><span>Blockchain</span><span>MySQL</span></div>
+      </article>
+      <article class="project">
+        <div class="project-head"><span class="project-num">02</span><h3>Agentic AI Dev Workflow</h3></div>
+        <p class="mission-role">YOOVO · 2024</p>
+        <p>Designed and deployed an AI agent system that automates repetitive development tasks — code generation, test scaffolding, and deployment — dramatically reducing feature delivery time across the engineering team.</p>
+        <div class="chips"><span>Agentic AI</span><span>Python</span><span>Automation</span><span>LLMs</span></div>
+      </article>
+      <article class="project">
+        <div class="project-head"><span class="project-num">03</span><h3>Full-Stack Client Portfolio</h3></div>
+        <p class="mission-role">Freelance</p>
+        <p>Production-grade web and mobile applications built end-to-end for clients spanning e-commerce, SaaS dashboards, and bespoke business tools — all delivered from design through deployment.</p>
+        <div class="chips"><span>React Native</span><span>Django</span><span>FastAPI</span><span>Laravel</span></div>
+      </article>
+    </div>
+  </template>
+
+  <template id="tpl-skills">
+    <div class="doc doc-code">
+      <p class="cmd"><span class="prompt">paul@pnt:~$</span> ./skills.sh --all</p>
+      <div class="skill-group"><p class="skill-key">languages</p><div class="chips"><span>JavaScript</span><span>TypeScript</span><span>C#</span><span>Python</span><span>Java</span><span>C++</span><span>Solidity</span><span>HTML</span><span>CSS / SCSS</span></div></div>
+      <div class="skill-group"><p class="skill-key">frameworks</p><div class="chips"><span>Angular</span><span>React.js</span><span>React Native</span><span>.NET</span><span>Django</span><span>FastAPI</span><span>Laravel</span><span>Ionic</span><span>Blockly</span></div></div>
+      <div class="skill-group"><p class="skill-key">cloud_devops</p><div class="chips"><span>AWS</span><span>Azure</span><span>Jenkins</span><span>CI/CD</span><span>Git</span><span>ClickUp</span></div></div>
+      <div class="skill-group"><p class="skill-key">ai</p><div class="chips chips-accent"><span>Agentic AI</span><span>Machine Learning</span><span>LLMs</span><span>Automation</span></div></div>
+      <div class="skill-group"><p class="skill-key">design_mgmt</p><div class="chips"><span>Figma</span><span>Photoshop</span><span>Illustrator</span><span>Jira</span><span>Microsoft 365</span></div></div>
+      <p class="cmd"><span class="prompt">paul@pnt:~$</span> cat certifications.log</p>
+      <ul class="cert-log">
+        <li><span class="ok">[DONE]</span> Microsoft AI Skills — Microsoft AI Tour</li>
+        <li><span class="ok">[DONE]</span> IELTS B2 — English Proficiency</li>
+        <li><span class="warn">[ .. ]</span> Machine Learning with Python — Anaconda</li>
+        <li><span class="warn">[ .. ]</span> Agentic AI Certification</li>
+      </ul>
+    </div>
+  </template>
+
+  <template id="tpl-education">
+    <div class="doc">
+      <p class="doc-kicker">// education/</p>
+      <article class="mission">
+        <div class="mission-head"><h3>Éstiam</h3><span>2025 — Present</span></div>
+        <p class="mission-role">Master's in Web &amp; Mobile Development · Paris, France</p>
+      </article>
+      <article class="mission">
+        <div class="mission-head"><h3>Université Antonine</h3><span>2021 — 2024</span></div>
+        <p class="mission-role">Bachelor's in Computer Science · Beirut, Lebanon</p>
+      </article>
+    </div>
+  </template>
+
+  <template id="tpl-contact">
+    <div class="doc">
+      <p class="doc-kicker">// contact.app</p>
+      <h2>Let's build something <span class="accent">great together.</span></h2>
+      <p>Open to full-time roles, freelance work, and exciting new challenges.</p>
+      <div class="contact-rows">
+        <a href="mailto:Nehmehabib@hotmail.com"><span>Email</span>Nehmehabib@hotmail.com</a>
+        <a href="tel:+33776248451"><span>Phone</span>(+33) 7 76 24 84 51</a>
+        <a href="https://www.linkedin.com/in/paul-nehme-tekle-86a382207/" target="_blank" rel="noopener"><span>LinkedIn</span>Paul Nehme Tekle ↗</a>
+        <a href="uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf" target="_blank" rel="noopener"><span>CV</span>Download PDF ↗</a>
+      </div>
+      <button class="btn btn-primary copy-email" type="button" data-email="Nehmehabib@hotmail.com">Copy email</button>
+    </div>
+  </template>
+
+  <script src="world.js?v=3"></script>
+</body>
+</html>
