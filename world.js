@@ -11,7 +11,7 @@ const FORM_ENDPOINT = '';
 const EMAIL = 'Nehmehabib@hotmail.com';
 
 // Photo: put one in uploads/ and set its path here, e.g. 'uploads/photo.jpg'
-const PHOTO_URL = '';
+const PHOTO_URL = 'uploads/profile.jpeg';
 if (PHOTO_URL) {
   document.body.classList.add('has-photo');
   document.querySelectorAll('img[data-photo]').forEach(img => (img.src = PHOTO_URL));
