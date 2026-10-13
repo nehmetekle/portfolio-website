@@ -14,6 +14,7 @@ const APPS = {
   education: { title: 'education/',  glyph: '◎',  tpl: 'tpl-education', w: 480, h: 320 },
   contact:   { title: 'contact.app', glyph: '✉',  tpl: 'tpl-contact',   w: 500, h: 500 },
   terminal:  { title: 'terminal',    glyph: '>_', w: 580, h: 600 },
+  game:      { title: 'byte-runner.exe', glyph: '▶', w: 660, h: 340 },
   cv:        { title: 'CV.pdf',      glyph: '⇩',  href: CV_URL },
 };
 
@@ -105,6 +106,7 @@ function openApp(id, origin) {
 
   const body = win.querySelector('.win-body');
   if (id === 'terminal') body.appendChild(createTerminal());
+  else if (id === 'game') body.appendChild(GAME.create(win));
   else body.appendChild(document.getElementById(app.tpl).content.cloneNode(true));
 
   // Size + cascade position, kept inside the desktop
@@ -267,9 +269,10 @@ const HELP = [
   ['cv',          'cv',            'download my CV'],
   ['ls',          'ls',            'list desktop files'],
   ['open <file>', 'open projects', 'open any desktop file'],
+  ['play',        'play',          'play Byte Runner 🎮'],
   ['neofetch',    'neofetch',      'system info'],
   ['history',     'history',       'commands you ran'],
-  ['achievements', 'achievements', 'your progress (9 to find)'],
+  ['achievements', 'achievements', 'your progress (10 to find)'],
   ['weather',     'weather',       'live weather in Paris'],
   ['bugs',        'bugs',          'how many bugs got fixed'],
   ['byte',        'byte',          'call Byte over'],
@@ -279,7 +282,7 @@ const HELP = [
   ['exit',        'exit',          'log out and reboot'],
 ];
 // Shortcut buttons pinned to the top of the terminal
-const QUICK_CMDS = ['help', 'whoami', 'about', 'career', 'projects', 'skills', 'contact', 'neofetch', 'matrix', 'clear'];
+const QUICK_CMDS = ['help', 'whoami', 'about', 'career', 'projects', 'skills', 'contact', 'play', 'matrix', 'clear'];
 
 const runButton = (label, cmd) =>
   `<button type="button" class="term-run" data-cmd="${cmd}">${escapeHtml(label)}</button>`;
@@ -316,6 +319,7 @@ const COMMANDS = {
   exit: () => { setTimeout(logout, 400); return 'logging out…'; },
 
   achievements: () => LIFE.achievementsReport(),
+  play: () => { openApp('game'); return '<span class="muted">launching byte-runner.exe… press space to jump</span>'; },
   weather: () => FRIENDS.weatherReport(),
   bugs: () => FRIENDS.bugsReport(),
   byte: () => { LIFE.pet.poke(); return '<span class="muted">Byte: beep boop! 🤖</span>'; },
@@ -342,7 +346,7 @@ const COMMANDS = {
 });
 Object.assign(COMMANDS, {
   experience: COMMANDS.career, work: COMMANDS.career, hire: COMMANDS.contact,
-  logout: COMMANDS.exit, reboot: COMMANDS.exit, '?': COMMANDS.help,
+  logout: COMMANDS.exit, reboot: COMMANDS.exit, game: COMMANDS.play, '?': COMMANDS.help,
 });
 
 function createTerminal() {

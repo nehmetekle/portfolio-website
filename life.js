@@ -47,6 +47,7 @@ const LIFE = (() => {
     rollercoaster: ['🎢', 'Rollercoaster', 'threw Byte across the desktop'],
     debugger:  ['🐛', 'Debugger',      'squashed 3 bugs yourself'],
     drone:     ['🛸', 'Drone pilot',   'said hi to Null the drone'],
+    gamer:     ['🎮', 'Gamer',         'scored 300 in Byte Runner'],
   };
   const TOTAL = Object.keys(ACHIEVEMENTS).length;
   const unlocked = new Set(JSON.parse(localStorage.getItem('pnt-achievements') || '[]').filter(k => k in ACHIEVEMENTS));
@@ -138,6 +139,7 @@ const LIFE = (() => {
     contact:   'Yes! Say hi to Paul 👋',
     cv:        'A recruiter?! Quick, everybody look professional!',
     terminal:  'Type <code>help</code> if you get lost!',
+    game:      'That\'s me in there! 🎮 Don\'t let me die!',
   };
 
   const HELD_LINES = ['Wheee! 🎢', 'Put me down! 😱', 'I can see my house from here!', 'Careful, I\'m fragile hardware!'];

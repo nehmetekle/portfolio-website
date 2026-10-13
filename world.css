@@ -570,3 +570,16 @@ body.world {
   transition: opacity 0.6s ease;
 }
 .matrix.fade { opacity: 0; }
+
+/* ── Byte Runner ──────────────────────── */
+.game { padding: 0; background: #05070d; }
+.game-canvas { display: block; width: 100%; cursor: pointer; touch-action: manipulation; }
+.game-help {
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-align: center;
+}
+.desk-icon[data-app="game"] .desk-glyph { color: var(--green); }
