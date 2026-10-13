@@ -733,3 +733,5 @@ body.world {
 
 /* Keep the city hidden behind the login screen; it's revealed by the fade-out */
 .world:has(.power:not(.off)) .wallpaper { visibility: hidden; }
+/* Rain/snow effects belong to the live Paris weather */
+.city-beirut .precip { display: none; }
