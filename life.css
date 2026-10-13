@@ -1,0 +1,260 @@
+/* ════════════════════════════════════════
+   PNT.OS life — pet, widgets, toasts, screensaver
+════════════════════════════════════════ */
+
+/* ── Icons feel touchable ─────────────── */
+.desk-glyph { transition: transform 0.35s var(--ease-out), box-shadow 0.35s, border-color 0.35s; }
+.desk-icon:hover .desk-glyph {
+  transform: translateY(-4px) rotate(-5deg) scale(1.06);
+  border-color: rgba(255,51,77,0.5);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.45), 0 0 18px rgba(255,51,77,0.25);
+}
+.desk-icon:active .desk-glyph { transform: scale(0.94); }
+
+/* ── Widgets ──────────────────────────── */
+.widgets {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 260px;
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity 0.8s ease 0.4s, transform 0.8s var(--ease-out) 0.4s;
+}
+.alive .widgets { opacity: 1; transform: none; }
+
+.widget {
+  padding: 16px 18px;
+  border: 1px solid var(--border-hi);
+  border-radius: 14px;
+  background: rgba(12,16,32,0.62);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+}
+.widget-greet { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); }
+.widget-time {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 3.2rem;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+.widget-date { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); }
+.widget-status {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-hi);
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.widget-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.live-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green);
+  animation: live 2s ease-in-out infinite;
+}
+@keyframes live { 50% { opacity: 0.35; } }
+.widget-now li { font-size: 0.83rem; color: var(--text-muted); line-height: 1.45; }
+.widget-now li + li { margin-top: 8px; }
+.widget-now b { color: var(--orange); font-weight: 500; }
+.learning-bar {
+  display: block;
+  height: 4px;
+  margin-top: 7px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(-45deg, var(--red) 0 6px, var(--orange) 6px 12px);
+  background-size: 34px 100%;
+  opacity: 0.8;
+  animation: stripes 1.2s linear infinite;
+}
+@keyframes stripes { to { background-position: 34px 0; } }
+
+.sticky {
+  align-self: flex-end;
+  width: 170px;
+  margin-top: 6px;
+  padding: 18px 16px 20px;
+  background: linear-gradient(170deg, #ffe58f, #ffd25e);
+  color: #3b2a07;
+  font-family: 'Caveat', cursive;
+  font-size: 1.45rem;
+  line-height: 1.15;
+  text-align: left;
+  border-radius: 2px 2px 14px 2px;
+  box-shadow: 0 14px 30px rgba(0,0,0,0.45);
+  transform: rotate(-4deg);
+  transition: transform 0.3s var(--ease-out);
+  position: relative;
+}
+.sticky::before {
+  content: '';
+  position: absolute;
+  top: -9px; left: 50%;
+  width: 60px; height: 18px;
+  background: rgba(255,255,255,0.35);
+  transform: translateX(-50%) rotate(3deg);
+}
+.sticky:hover { transform: rotate(0deg) scale(1.05); }
+
+@media (min-width: 721px) and (max-width: 1279px) {
+  .widgets { display: none; }
+}
+@media (max-width: 720px) {
+  .widgets { top: 330px; left: 0; right: 0; margin: 0 auto; width: min(300px, calc(100% - 32px)); }
+  .widget-now { display: none; }
+  .sticky { align-self: center; }
+}
+
+/* ── Notifications ────────────────────── */
+.toasts {
+  position: fixed;
+  bottom: 60px;
+  right: 16px;
+  z-index: 7000;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+  width: min(340px, calc(100vw - 32px));
+  pointer-events: none;
+}
+.toast {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border: 1px solid var(--border-hi);
+  border-radius: 12px;
+  background: rgba(14,18,34,0.92);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  text-align: left;
+  pointer-events: auto;
+  animation: toast-in 0.5s var(--ease-out);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+button.toast { cursor: pointer; }
+button.toast:hover { border-color: var(--red); }
+.toast.out { opacity: 0; transform: translateX(30px); }
+@keyframes toast-in { from { opacity: 0; transform: translateX(60px) scale(0.96); } }
+.toast-icon { font-size: 1.4rem; line-height: 1.2; }
+.toast-text { display: flex; flex-direction: column; gap: 2px; }
+.toast-text b { font-size: 0.88rem; color: #fff; font-weight: 600; }
+.toast-text span { font-size: 0.8rem; color: var(--text-muted); }
+
+/* ── Byte the robot ───────────────────── */
+.pet {
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  z-index: 3500;
+  width: 56px;
+  height: 56px;
+  cursor: pointer;
+  filter: drop-shadow(0 6px 8px rgba(0,0,0,0.5));
+  animation: pet-in 0.6s var(--ease-out);
+}
+@keyframes pet-in { from { opacity: 0; } }
+.pet-sprite { display: block; overflow: visible; }
+.pet-sprite rect { transform-box: fill-box; transform-origin: center; }
+
+.p-eyes { transform-box: fill-box; transform-origin: center; animation: pet-blink 4.5s infinite; }
+@keyframes pet-blink { 0%, 93%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.15); } }
+.p-led { animation: led 1.6s steps(1) infinite; }
+@keyframes led { 50% { fill: #5a1a24; } }
+.p-core { animation: live 1.4s ease-in-out infinite; }
+
+.walking .pet-sprite { animation: bob 0.36s steps(2) infinite; }
+.walking .p-leg-l { animation: step 0.36s steps(1) infinite; }
+.walking .p-leg-r { animation: step 0.36s steps(1) infinite 0.18s; }
+.walking .p-arm-l { animation: step 0.36s steps(1) infinite 0.18s; }
+.walking .p-arm-r { animation: step 0.36s steps(1) infinite; }
+@keyframes bob  { 50% { translate: 0 -2px; } }
+@keyframes step { 50% { transform: translateY(-1px); } }
+
+.sleeping .p-eyes { animation: none; transform: scaleY(0.2); }
+.sleeping .p-mouth { opacity: 0.25; }
+.pet-zzz {
+  position: absolute;
+  top: -10px;
+  left: 40px;
+  display: none;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.pet-zzz i { font-style: normal; font-size: 0.7em; margin-left: 2px; }
+.sleeping .pet-zzz { display: block; animation: zzz 2.4s ease-in-out infinite; }
+@keyframes zzz { 0% { opacity: 0; transform: translate(0, 6px); } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(10px, -14px); } }
+
+.pet.jump .pet-sprite { animation: jump 0.5s cubic-bezier(0.3, 1.6, 0.5, 1); }
+@keyframes jump { 0% { translate: 0 0; } 40% { translate: 0 -22px; } 100% { translate: 0 0; } }
+
+.pet-bubble {
+  position: absolute;
+  bottom: 66px;
+  left: 12px;
+  width: max-content;
+  max-width: 230px;
+  padding: 9px 12px;
+  border: 1px solid var(--border-hi);
+  border-radius: 12px 12px 12px 3px;
+  background: #f4f6fb;
+  color: #11162a;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  text-align: left;
+  white-space: normal;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.4);
+  animation: bubble 0.3s var(--ease-out);
+}
+.pet-bubble.left { left: auto; right: 10px; border-radius: 12px 12px 3px 12px; }
+.pet-bubble code { font-family: var(--font-mono); font-size: 0.9em; color: var(--red); }
+@keyframes bubble { from { opacity: 0; transform: translateY(6px) scale(0.9); } }
+
+/* ── Screensaver ──────────────────────── */
+.screensaver {
+  position: absolute;
+  inset: 0;
+  z-index: 4600;
+  background: rgba(4,6,12,0.88);
+  backdrop-filter: blur(6px);
+  animation: pet-in 1s ease;
+}
+.saver-logo {
+  position: absolute;
+  top: 0; left: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3rem, 8vw, 6rem);
+  color: #fff;
+  will-change: transform;
+}
+.saver-logo i { font-style: normal; color: var(--dot, var(--red)); transition: color 0.3s; }
+.saver-hint {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}

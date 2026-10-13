@@ -4,7 +4,7 @@
 
 const CV_URL = 'uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf';
 
-// Desktop apps. `tpl` points at a <template> in world.html; `href` opens a link instead of a window.
+// Desktop apps. `tpl` points at a <template> in index.html; `href` opens a link instead of a window.
 const APPS = {
   readme:    { title: 'welcome.md',  glyph: '✦',  tpl: 'tpl-readme',    w: 440, h: 400 },
   about:     { title: 'about.txt',   glyph: '▣',  tpl: 'tpl-about',     w: 540, h: 520 },
@@ -13,7 +13,7 @@ const APPS = {
   skills:    { title: 'skills.sh',   glyph: '❯',  tpl: 'tpl-skills',    w: 580, h: 540 },
   education: { title: 'education/',  glyph: '◎',  tpl: 'tpl-education', w: 480, h: 320 },
   contact:   { title: 'contact.app', glyph: '✉',  tpl: 'tpl-contact',   w: 500, h: 500 },
-  terminal:  { title: 'terminal',    glyph: '>_', w: 620, h: 600 },
+  terminal:  { title: 'terminal',    glyph: '>_', w: 580, h: 600 },
   cv:        { title: 'CV.pdf',      glyph: '⇩',  href: CV_URL },
 };
 
@@ -49,9 +49,9 @@ Object.entries(APPS).forEach(([id, app]) => {
   // Mouse: click selects, double-click opens. Touch & keyboard (detail 0): open right away.
   btn.addEventListener('click', e => {
     iconList.querySelectorAll('.desk-icon').forEach(b => b.classList.toggle('selected', b === btn));
-    if (isTouch || e.detail === 0) openApp(id);
+    if (isTouch || e.detail === 0) openApp(id, btn);
   });
-  btn.addEventListener('dblclick', () => openApp(id));
+  btn.addEventListener('dblclick', () => openApp(id, btn));
 
   li.appendChild(btn);
   iconList.appendChild(li);
@@ -62,13 +62,31 @@ desktop.addEventListener('pointerdown', e => {
 });
 
 /* ─── Window manager ─────────────────────── */
-function openApp(id) {
+// Animate a window between its own box and another element (icon, taskbar button)
+function morph(win, otherEl, reverse = false) {
+  if (FX.reduceMotion || !otherEl) return null;
+  const a = otherEl.getBoundingClientRect(), b = win.getBoundingClientRect();
+  if (!a.width || !b.width) return null;
+  const dx = a.left + a.width / 2 - (b.left + b.width / 2);
+  const dy = a.top + a.height / 2 - (b.top + b.height / 2);
+  const away = { transform: `translate(${dx}px, ${dy}px) scale(${Math.max(0.06, a.width / b.width)})`, opacity: 0 };
+  const home = { transform: 'none', opacity: 1 };
+  return win.animate(reverse ? [home, away] : [away, home], {
+    duration: reverse ? 300 : 440,
+    easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+  });
+}
+
+// `origin` is the element the window should grow out of (optional)
+function openApp(id, origin) {
   const app = APPS[id];
   if (!app) return false;
+  document.dispatchEvent(new CustomEvent('pnt:open', { detail: { id } }));
   if (app.href) { window.open(app.href, '_blank', 'noopener'); return true; }
 
   const existing = windows.get(id);
   if (existing) { restore(id); return true; }
+  FX.sfx.open();
 
   const win = document.createElement('section');
   win.className = 'win';
@@ -131,6 +149,10 @@ function openApp(id) {
 
   desktop.appendChild(win);
   windows.set(id, { el: win, taskBtn });
+  if (origin) {
+    win.classList.add('no-pop');
+    morph(win, origin);
+  }
   focusWin(id);
   return true;
 }
@@ -149,34 +171,45 @@ function focusWin(id) {
 
 function restore(id) {
   const w = windows.get(id);
-  w.el.classList.remove('minimized');
-  w.taskBtn.classList.remove('min');
+  if (w.el.classList.contains('minimized')) {
+    w.el.classList.remove('minimized');
+    w.taskBtn.classList.remove('min');
+    morph(w.el, w.taskBtn);
+  }
   focusWin(id);
 }
 
 function minimize(id) {
   const w = windows.get(id);
-  w.el.classList.add('minimized');
   w.el.classList.remove('focused');
   w.taskBtn.classList.add('min');
   w.taskBtn.classList.remove('active');
-  focusTopmost();
+  const hide = () => w.el.classList.add('minimized');
+  const anim = morph(w.el, w.taskBtn, true);
+  anim ? (anim.onfinish = hide) : hide();
+  focusTopmost(id);
 }
 
 function closeWin(id) {
   const w = windows.get(id);
   if (!w) return;
-  w.el.remove();
-  w.taskBtn.remove();
+  FX.sfx.close();
   windows.delete(id);
+  w.taskBtn.remove();
+  const anim = FX.reduceMotion ? null : w.el.animate(
+    [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(0.94)' }],
+    { duration: 170, easing: 'ease-in' }
+  );
+  anim ? (anim.onfinish = () => w.el.remove()) : w.el.remove();
   focusTopmost();
 }
 
-function focusTopmost() {
+// `except` skips a window that is mid-minimize and not hidden yet
+function focusTopmost(except) {
   let best = null, bestZ = -1;
   windows.forEach(({ el }, key) => {
     const z = +el.style.zIndex || 0;
-    if (!el.classList.contains('minimized') && z > bestZ) { best = key; bestZ = z; }
+    if (key !== except && !el.classList.contains('minimized') && z > bestZ) { best = key; bestZ = z; }
   });
   if (best) focusWin(best);
 }
@@ -236,12 +269,14 @@ const HELP = [
   ['open <file>', 'open projects', 'open any desktop file'],
   ['neofetch',    'neofetch',      'system info'],
   ['history',     'history',       'commands you ran'],
+  ['achievements', 'achievements', 'your progress (6 to find)'],
+  ['matrix',      'matrix',        'follow the white rabbit'],
+  ['hack',        'hack',          'don\'t.'],
   ['clear',       'clear',         'clear the screen'],
-  ['pro',         'pro',           'go to the professional view'],
-  ['exit',        'exit',          'log out'],
+  ['exit',        'exit',          'log out and reboot'],
 ];
 // Shortcut buttons pinned to the top of the terminal
-const QUICK_CMDS = ['help', 'whoami', 'about', 'career', 'projects', 'skills', 'contact', 'neofetch', 'cv', 'clear'];
+const QUICK_CMDS = ['help', 'whoami', 'about', 'career', 'projects', 'skills', 'contact', 'neofetch', 'matrix', 'clear'];
 
 const runButton = (label, cmd) =>
   `<button type="button" class="term-run" data-cmd="${cmd}">${escapeHtml(label)}</button>`;
@@ -275,15 +310,33 @@ const COMMANDS = {
 
   sudo: () => '<span class="err">paul is not in the sudoers file.</span> But he is open to new roles → try `contact`',
 
-  pro: () => { setTimeout(() => (location.href = 'professional.html'), 400); return 'switching to professional view…'; },
-  exit: () => { setTimeout(() => (location.href = './'), 400); return 'logging out…'; },
+  exit: () => { setTimeout(logout, 400); return 'logging out…'; },
+
+  achievements: () => LIFE.achievementsReport(),
+
+  matrix: () => { FX.matrix(desktop); return '<span class="muted">wake up, visitor… (click to exit)</span>'; },
+
+  hack: (args, print) => {
+    const steps = [
+      ['warn', 'bypassing firewall…'],
+      ['warn', 'decrypting /home/paul/secrets…'],
+      ['ok',   '[██████████] 100%'],
+      ['err',  'ACCESS DENIED'],
+      ['',     'nice try 😄 — no need to hack in, just type <span class="warn">contact</span>'],
+    ];
+    steps.forEach(([cls, text], i) => setTimeout(() => {
+      if (cls === 'err') FX.sfx.error(); else FX.sfx.tick();
+      print(cls ? `<span class="${cls}">${text}</span>` : text);
+    }, 450 * (i + 1)));
+    return '<span class="muted">initiating hack.exe…</span>';
+  },
 };
 ['about', 'career', 'projects', 'skills', 'education', 'contact'].forEach(id => {
   COMMANDS[id] = () => { openApp(id); return `<span class="muted">opened ${APPS[id].title}</span>`; };
 });
 Object.assign(COMMANDS, {
   experience: COMMANDS.career, work: COMMANDS.career, hire: COMMANDS.contact,
-  professional: COMMANDS.pro, logout: COMMANDS.exit, '?': COMMANDS.help,
+  logout: COMMANDS.exit, reboot: COMMANDS.exit, '?': COMMANDS.help,
 });
 
 function createTerminal() {
@@ -313,6 +366,7 @@ function createTerminal() {
 
     const [cmd, ...args] = line.split(/\s+/);
     const name = cmd.toLowerCase();
+    document.dispatchEvent(new CustomEvent('pnt:cmd', { detail: { name } }));
 
     if (name === 'clear') { out.innerHTML = ''; return; }
     if (name === 'echo') { print(escapeHtml(args.join(' '))); return; }
@@ -326,10 +380,12 @@ function createTerminal() {
     if (name === './skills.sh') { print(COMMANDS.skills()); return; }
 
     const fn = COMMANDS[name];
-    print(fn ? fn(args) : `<span class="err">command not found: ${escapeHtml(cmd)}</span> — type \`help\``);
+    if (!fn) FX.sfx.error();
+    print(fn ? fn(args, print) : `<span class="err">command not found: ${escapeHtml(cmd)}</span> — type \`help\``);
   }
 
   input.addEventListener('keydown', e => {
+    if (e.key.length === 1 || e.key === 'Backspace') FX.sfx.key();
     if (e.key === 'Enter') {
       run(input.value);
       input.value = '';
@@ -362,28 +418,81 @@ function createTerminal() {
   return term;
 }
 
-/* ─── Power on + login ───────────────────── */
+/* ─── Buttons that open apps, log out, deep links ── */
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-open]');
+  if (btn) openApp(btn.dataset.open, btn);
+});
+
+function logout() {
+  sessionStorage.removeItem('pnt-logged-in');
+  location.href = location.pathname;
+}
+document.getElementById('logout').addEventListener('click', logout);
+
+// Old section links (/#projects, /#experience…) open the matching window
+const HASH_APPS = { about: 'about', experience: 'career', career: 'career', skills: 'skills', projects: 'projects', education: 'education', contact: 'contact' };
+function openFromHash() {
+  const id = HASH_APPS[location.hash.slice(1).toLowerCase()];
+  if (id) openApp(id);
+  return Boolean(id);
+}
+window.addEventListener('hashchange', openFromHash);
+
+/* ─── Power on → boot log → login → desktop ── */
 function openStartupWindows() {
+  document.dispatchEvent(new CustomEvent('pnt:ready'));
   if (!isSmall()) {
     openApp('terminal');
     const term = windows.get('terminal').el;
-    term.style.left = `${Math.max(8, desktop.clientWidth - term.offsetWidth - 40)}px`;
+    // Sit just left of the desktop widgets when they're showing
+    const widgets = document.getElementById('widgets');
+    const rightEdge = widgets.offsetParent ? widgets.offsetLeft - 24 : desktop.clientWidth - 40;
+    term.style.left = `${Math.max(8, rightEdge - term.offsetWidth)}px`;
     term.style.top  = `${Math.max(8, desktop.clientHeight - term.offsetHeight - 40)}px`;
   }
-  // Small delay so the two windows pop in one after the other
-  setTimeout(() => openApp('readme'), isSmall() ? 0 : 260);
+  // Small delays so the windows pop in one after the other
+  setTimeout(() => {
+    openApp('readme');
+    setTimeout(openFromHash, 260);
+  }, isSmall() ? 0 : 260);
 }
 
-(function powerOn() {
-  const power  = document.getElementById('power');
-  const user   = document.getElementById('login-user');
-  const pass   = document.getElementById('login-pass');
-  const status = document.getElementById('login-status');
-  const skip   = document.getElementById('power-skip');
+/* ─── Live wallpaper + sound toggle ─────── */
+if (!FX.wallpaper(document.getElementById('wallpaper'))) {
+  document.getElementById('wallpaper').remove();
+}
 
-  sessionStorage.setItem('pnt-booted', '1');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (sessionStorage.getItem('pnt-logged-in') || reduceMotion) {
+(function soundToggle() {
+  const btn = document.getElementById('sound-toggle');
+  const render = () => {
+    btn.textContent = FX.isMuted() ? '♪ muted' : '♪ sound';
+    btn.setAttribute('aria-pressed', String(!FX.isMuted()));
+  };
+  btn.addEventListener('click', () => {
+    FX.setMuted(!FX.isMuted());
+    render();
+    FX.sfx.open();
+  });
+  render();
+})();
+
+(function powerOn() {
+  const power     = document.getElementById('power');
+  const gate      = document.getElementById('power-gate');
+  const powerBtn  = document.getElementById('power-btn');
+  const bootStage = document.getElementById('boot-stage');
+  const bootLog   = document.getElementById('boot-log');
+  const progress  = document.getElementById('boot-progress');
+  const login     = document.getElementById('login');
+  const user      = document.getElementById('login-user');
+  const pass      = document.getElementById('login-pass');
+  const status    = document.getElementById('login-status');
+  const finale    = document.getElementById('finale');
+  const finaleName = document.getElementById('finale-name');
+  const skip      = document.getElementById('power-skip');
+
+  if (sessionStorage.getItem('pnt-logged-in') || FX.reduceMotion) {
     power.remove();
     openStartupWindows();
     return;
@@ -391,7 +500,7 @@ function openStartupWindows() {
 
   const timers = [];
   const at = (ms, fn) => timers.push(setTimeout(fn, ms));
-  let done = false;
+  let started = false, done = false;
 
   function finish() {
     if (done) return;
@@ -400,26 +509,80 @@ function openStartupWindows() {
     sessionStorage.setItem('pnt-logged-in', '1');
     document.removeEventListener('keydown', onKey);
     power.classList.add('off');
-    document.body.classList.add('logged-in');
     setTimeout(openStartupWindows, 350);
-    setTimeout(() => power.remove(), 900);
+    setTimeout(() => power.remove(), 1000);
   }
   function onKey(e) {
-    if (['Enter', 'Escape', ' '].includes(e.key)) finish();
+    if (!['Enter', 'Escape', ' '].includes(e.key)) return;
+    e.preventDefault();
+    started ? finish() : start();
   }
   skip.addEventListener('click', finish);
+  powerBtn.addEventListener('click', start);
   document.addEventListener('keydown', onKey);
+  powerBtn.focus({ preventScroll: true });
 
-  // Type text one character at a time starting at `start` ms; returns when it ends
-  function typeInto(el, text, start, speed = 70) {
-    [...text].forEach((ch, i) => at(start + i * speed, () => (el.textContent += ch)));
-    return start + text.length * speed;
+  function typeInto(el, text, startAt, speed = 65) {
+    [...text].forEach((ch, i) => at(startAt + i * speed, () => {
+      el.textContent += ch;
+      FX.sfx.key();
+    }));
+    return startAt + text.length * speed;
   }
 
-  // 0–900ms: CRT warm-up (CSS animation). Then the login form types itself in.
-  let t = typeInto(user, 'visitor', 1300);
-  t = typeInto(pass, '••••••••', t + 250, 55);
-  at(t + 300, () => { status.textContent = 'authenticating…'; });
-  at(t + 1000, () => { status.textContent = 'access granted — welcome to paul\'s workstation'; status.classList.add('ok'); });
-  at(t + 1900, finish);
+  function start() {
+    if (started) return;
+    started = true;
+    FX.sfx.powerOn();
+    gate.classList.add('gone');
+    power.classList.add('on');   // triggers the CRT warm-up animation
+
+    // Boot log
+    const BOOT_LINES = [
+      ['hi',   'PNT.OS v1.0 — (c) 2026 Paul Nehme Tekle'],
+      ['',     ''],
+      ['ok',   '[  OK  ] Mounting /home/paul'],
+      ['ok',   '[  OK  ] Loading modules: angular react dotnet python'],
+      ['ok',   '[  OK  ] Starting agentic-ai.service'],
+      ['ok',   '[  OK  ] Restoring career/ (2023 — present)'],
+      ['warn', '[ INFO ] Locating user… Paris, FR'],
+      ['ok',   '[  OK  ] Reached target: portfolio.target'],
+    ];
+    const BOOT_START = 1000, LINE_MS = 140;
+    BOOT_LINES.forEach(([cls, text], i) => at(BOOT_START + i * LINE_MS, () => {
+      const line = document.createElement('div');
+      if (cls) line.className = cls;
+      line.textContent = text || ' ';
+      bootLog.appendChild(line);
+      progress.style.width = `${((i + 1) / BOOT_LINES.length) * 100}%`;
+      FX.sfx.tick();
+    }));
+
+    // Login types itself in
+    const loginAt = BOOT_START + BOOT_LINES.length * LINE_MS + 400;
+    at(loginAt, () => { bootStage.hidden = true; login.hidden = false; });
+    let t = typeInto(user, 'visitor', loginAt + 450);
+    t = typeInto(pass, '••••••••', t + 200, 50);
+    at(t + 200, () => { status.textContent = 'authenticating…'; });
+    at(t + 800, () => {
+      status.textContent = 'access granted';
+      status.classList.add('ok');
+      FX.sfx.granted();
+    });
+
+    // Glitch, then the name decrypts on screen, then dive into the desktop
+    at(t + 1500, () => {
+      FX.sfx.glitch();
+      power.classList.add('glitch');
+      setTimeout(() => power.classList.remove('glitch'), 380);
+    });
+    at(t + 1750, async () => {
+      login.hidden = true;
+      finale.hidden = false;
+      await FX.decrypt(finaleName, 'PAUL\nNEHME\nTEKLE', 1300, FX.sfx.tick);
+      if (done) return;
+      finale.classList.add('lit');
+      timers.push(setTimeout(() => { FX.sfx.whoosh(); finish(); }, 1100));
+    });
+  }
 })();
