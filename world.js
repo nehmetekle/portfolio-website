@@ -2,8 +2,8 @@
    PNT.OS — window manager + terminal
 ════════════════════════════════════════ */
 
-const CV_URL = 'uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf?v=3';
-const CV_FR_URL = 'uploads/Paul%20Nehme%20Tekle%20-%20CV%20(FR).pdf?v=2';
+const CV_URL = 'uploads/Paul%20Nehme%20Tekle%20-%20CV.pdf?v=4';
+const CV_FR_URL = 'uploads/Paul%20Nehme%20Tekle%20-%20CV%20(FR).pdf?v=3';
 const GITHUB_URL = 'https://github.com/nehmetekle';
 
 // Photo: put one in uploads/ and set its path here, e.g. 'uploads/photo.jpg'
